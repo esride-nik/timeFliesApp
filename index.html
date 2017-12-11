@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <title>[blu:]tour</title>
+
+  <link rel="stylesheet" href="blu.css">
+
+  <style>
+    .esride-camera-status {
+      padding:6px;
+    }
+  </style>
+
+  <!-- Importing Calcite -->
+  <link rel="stylesheet" href="https://s3-us-west-1.amazonaws.com/patterns.esri.com/files/calcite-web/1.0.0-rc.7/css/calcite-web.min.css">
+  <script src="https://s3-us-west-1.amazonaws.com/patterns.esri.com/files/calcite-web/1.0.0-rc.7/js/calcite-web.min.js"></script>
+
+  <link rel="stylesheet" href="https://js.arcgis.com/4.5/esri/css/main.css">
+  <link rel="stylesheet" href="https://dojotoolkit.org/reference-guide/1.10/_static/js/dijit/themes/claro/claro.css"> <!-- https://js.arcgis.com/4.4/dijit/themes/claro/claro.css"> -->
+
+  <script>
+    var locationPath = location.pathname.replace(/\/[^\/]+$/, "/");
+    window.dojoConfig = {
+      packages: [
+        {
+          name: "app",
+          location: locationPath + "app"
+        }
+      ]
+    };
+  </script>
+  <script src="https://js.arcgis.com/4.5/"></script>
+</head>
+
+<body>
+  <div>
+    <div class="germany" role="banner">
+      <header class="sub-nav" role="banner">
+        <div class="grid-container">
+          <div class="column-24" id="headerContainer">
+            <h1 class="sub-nav-title text-white">[blu:]tour</h1>
+      <!-- 
+            <select class="phone-show select-full trailer-half js-select-nav" id="selectParty">
+              <option class="sub-nav-link" value='cducsu' selected>CDU / CSU</option>
+              <option class="sub-nav-link" value='spd'>SPD</option>
+              <option class="sub-nav-link" value='fdp'>FDP</option>
+              <option class="sub-nav-link" value='gruene'>Bündnis 90 / Die Grünen</option>
+              <option class="sub-nav-link" value='linke'>Die Linke</option>
+              <option class="sub-nav-link" value='afd'>AfD</option>
+            </select>
+      
+            <nav class="sub-nav-list phone-hide" role="navigation" aria-labelledby="subnav">
+              <a class="sub-nav-link is-active" href='#' id="cducsu">CDU / CSU</a>
+              <a class="sub-nav-link" href='#' id="spd">SPD</a>
+              <a class="sub-nav-link" href='#' id="fdp">FDP</a>
+              <a class="sub-nav-link" href='#' id="gruene">Bündnis 90 / Die Grünen</a>
+              <a class="sub-nav-link" href='#' id="linke">Die Linke</a>
+              <a class="sub-nav-link" href='#' id="afd">AfD</a>
+            </nav> -->
+          </div>
+        </div>
+      </header>
+    </div>
+  </div>
+    
+<!--   <div id="loader" class="loader is-active padding-leader-3 padding-trailer-3">
+    <div class="loader-bars"></div>
+    <div class="loader-text">Loading...</div>
+  </div> -->
+
+  <div id="viewDiv"></div>
+  <mark class="label label-yellow">This thing does not work in Internet Explorer.</mark>
+  <script>require(["app/main"]);</script>
+</body>
+</html>
