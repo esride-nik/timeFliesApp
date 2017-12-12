@@ -38,12 +38,14 @@ import lang = require("dojo/_base/lang");
 import array = require("dojo/_base/array");
 import on = require("dojo/on");
 import CameraStatus = require("./cameraStatus");
+import TimeFlies = require("./TimeFlies");
 
 class Btw2017 extends _WidgetBase {
 
     private renderer: SimpleRenderer;
     private config: any;
-
+    private blutourFLayer: FeatureLayer;
+/* 
     private partycolors: PartyProperties = {
         "afd": [0, 158, 224, 1.0],
         "cducsu": [0, 0, 0, 1.0],
@@ -67,7 +69,7 @@ class Btw2017 extends _WidgetBase {
         "spd": 38,
         "linke": 30,
         "gruene": 22
-        }
+        } */
     
     constructor(args?: Array<any>) {
         super(lang.mixin({baseClass: "jimu-blu"}, args));
@@ -84,38 +86,6 @@ class Btw2017 extends _WidgetBase {
 
         console.log("constructor");
         this.initScene();
-    }
-
-    addMenuFunctionality(btwLayer: FeatureLayer) {
-        // functionality for nav anchors
-        Object.keys(this.partyname).map(name => {
-            on(dom.byId(name), "click", (evt: MouseEvent) => {
-                btwLayer.renderer = this.defineRenderer(name);
-                btwLayer.popupTemplate = this.defineInfoTemplate(name);
-                this.activateMenuButton(name);
-            });
-        });
-        // functionality for select options
-        on(dom.byId("selectParty"), "change", (evt: any) => {
-            console.log("selectParty", evt, evt.srcElement.selectedOptions[0].value);
-            if (evt && evt.srcElement && evt.srcElement.selectedOptions && evt.srcElement.selectedOptions[0]) {
-                btwLayer.renderer = this.defineRenderer(evt.srcElement.selectedOptions[0].value);
-                btwLayer.popupTemplate = this.defineInfoTemplate(evt.srcElement.selectedOptions[0].value);
-            }
-        });
-    }
-
-    activateMenuButton(activate: string) {
-        this.deactivateAllMenuItemsBut([activate]);
-        domClass.add(dom.byId(activate), "is-active");
-    }
-
-    deactivateAllMenuItemsBut(dontDeactivate: string[]) {
-        Object.keys(this.partyname).map(name => {
-            if (dontDeactivate.indexOf(name) === -1) {
-                domClass.remove(dom.byId(name), "is-active");
-            }
-        });
     }
 
     initScene() {
@@ -135,8 +105,14 @@ class Btw2017 extends _WidgetBase {
             var blutourLayer: Layer = webscene.layers.find(function(layer: Layer) {
                 return layer.title === "verpasst_03_date_hfl";
                 });
-            var blutourFLayer: FeatureLayer = blutourLayer as FeatureLayer;
-            blutourFLayer.popupTemplate = this.defineInfoTemplate();
+            this.blutourFLayer = blutourLayer as FeatureLayer;
+            this.blutourFLayer.popupTemplate = this.defineInfoTemplate();
+            
+            var timeFlies = new TimeFlies({
+                flightLayer: this.blutourFLayer,
+                dateFieldName: "date"
+            });
+            sceneView.ui.add(timeFlies, "bottom-left");
         });
 
 
@@ -167,7 +143,7 @@ class Btw2017 extends _WidgetBase {
                 var cameraStatus = new CameraStatus({
                     sceneView: sceneView
                 });
-                sceneView.ui.add(cameraStatus, "bottom-left");
+                sceneView.ui.add(cameraStatus, "top-right");
     
                 // Set up a home button for resetting the viewpoint to the intial extent
                 var homeBtn = new Home({

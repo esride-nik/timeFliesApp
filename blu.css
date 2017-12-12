@@ -29,6 +29,16 @@ body,
 }
 
 
+/* START own widgets */
+.esride-camera-status {
+  padding:6px;
+}
+.esride-time-flies {
+  padding:6px;
+}
+/* END own widgets */
+
+
 /* START adjusting Calcite elements */
 .loader {
     width: 100%;
