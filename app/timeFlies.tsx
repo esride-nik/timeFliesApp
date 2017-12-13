@@ -1,7 +1,14 @@
 import Widget = require("esri/widgets/Widget");
 import FeatureLayer = require("esri/layers/FeatureLayer");
 import Query = require("esri/tasks/support/Query");
+import FeatureSet = require("esri/tasks/support/FeatureSet");
+import SceneView = require("esri/views/SceneView");
+import Graphic = require("esri/Graphic");
+import Geometry = require("esri/geometry/Geometry");
+import Point = require("esri/geometry/Point");
+import SpatialReference = require("esri/geometry/SpatialReference");
 import Accessor = require("esri/core/Accessor");
+import Deferred = require("dojo/Deferred");
 import { subclass, declared, property } from "esri/core/accessorSupport/decorators";
 import { renderable, tsx } from "esri/widgets/support/widget";
 
@@ -13,6 +20,9 @@ const CSS = {
 interface TimeFliesParams {
     flightLayer: FeatureLayer;
     dateFieldName: string;
+    sceneView: SceneView;
+    zoomInLevel: number;
+    zoomOutLevel: number;
 }
 
 @subclass("esride.widgets.TimeFlies")
@@ -25,50 +35,82 @@ class TimeFlies extends declared(Widget) {
     _dateFieldName: string;
 
     @property()
-    @renderable()
-    fieldOfView: number = 0;
+    _sceneView: SceneView;
+
+    @property()
+    _zoomInLevel: number;
+
+    @property()
+    _zoomOutLevel: number;
 
     @property()
     @renderable()
-    heading: number = 0;
-
-    @property()
-    @renderable()
-    tilt: number = 0;
-
-    @property()
-    @renderable()
-    latitude: number = 0;
-
-    @property()
-    @renderable()
-    longitude: number = 0;
-
-    @property()
-    @renderable()
-    altitude: number = 0;
+    fid: number;
 
     constructor(params: TimeFliesParams) {
         super();
         this._flightLayer = params.flightLayer;
         this._dateFieldName = params.dateFieldName;
+        this._sceneView = params.sceneView;
+        this._zoomInLevel = params.zoomInLevel;
+        this._zoomOutLevel = params.zoomOutLevel;
         
         var query = new Query();
         query.where = "1=1";
         query.orderByFields = [this._dateFieldName + " desc"];
-        query.returnGeometry = false;
+        query.returnGeometry = true;
         query.outFields = ["*"];
         console.log("TimeFlies Query", query);
         
-        this._flightLayer.queryFeatures(query).then(function(results){
-          console.log("TimeFlies Result", results.features);  // prints the array of features to the console
-          // ToDo: Zoom to first feature (look up what the feature action in the popup is doing)
+        this._flightLayer.queryFeatures(query).then((results: FeatureSet) => {
+          console.log("TimeFlies Result", results.features);
+          this.iterateThroughFeaturesSynchronously(results.features, 0);
+
           // ToDo: Create animation for alle features
           // ToDo: Open popups automatically
           // ToDo: Play videos automatically
+          // ToDo: create route to all features, put into FL with ID corresponding to point and highlight route feature on each animation
         });
-      }
+    }
 
+    iterateThroughFeaturesSynchronously(features: Graphic[], i: number) {
+        // don't iterate via features.map(), because this executes asynchonously and doesn't wait for the animation to finish
+        if (features.length>i) {
+            this.zoomAndCenterOnFeature(features[i]).then((evt: any) => {
+                    console.log("zoomAndCenterOnFeature then", evt);
+                    i++;
+                    this.fid = (features[i] as Graphic).attributes.FID;
+                    this.iterateThroughFeaturesSynchronously(features, i);
+                }
+            );
+        }
+        else {
+            console.log("Iteration finished.");
+        }
+    }
+
+    zoomAndCenterOnFeature(feature: Graphic): Deferred {
+        console.log("centering on feature", feature, feature.attributes.ort, feature.attributes.infos);
+
+        var latitute: number = 0;
+        var longitude: number = 0;
+
+        // ToDo: Zoom to first feature (feature action "zoom" zooms in four LODs and centers on the selected feature)
+        if (feature.geometry.type==="point") {
+            latitute = (feature.geometry as Point).latitude;
+            longitude = (feature.geometry as Point).longitude;
+        }
+
+        return this._sceneView.goTo({
+            zoom: this._zoomInLevel,
+            center: [longitude, latitute],
+            tilt: 75
+        }, {
+            animate: true,
+            duration: 4000,
+            easing: "in-out-cubic"
+        });
+    }
 
     render() {
         const classes = {
@@ -79,12 +121,7 @@ class TimeFlies extends declared(Widget) {
             <div bind={this}
                 class={CSS.base}
                 classes={classes}>
-                Field of view: {this.fieldOfView.toFixed(2)}<br/>
-                Heading: {this.heading.toFixed(2)}<br/>
-                Tilt: {this.tilt.toFixed(2)}<br/>
-                Latitude: {this.latitude.toFixed(2)}<br/>
-                Longitude: {this.longitude.toFixed(2)}<br/>
-                Altitude: {this.altitude.toFixed(2)}<br/>
+                Feature No.: {this.fid}<br/>
             </div>
         );    
     }

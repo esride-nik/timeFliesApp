@@ -110,7 +110,10 @@ class Btw2017 extends _WidgetBase {
             
             var timeFlies = new TimeFlies({
                 flightLayer: this.blutourFLayer,
-                dateFieldName: "date"
+                dateFieldName: "date",
+                sceneView: sceneView,
+                zoomInLevel: 10,
+                zoomOutLevel: 7
             });
             sceneView.ui.add(timeFlies, "bottom-left");
         });
