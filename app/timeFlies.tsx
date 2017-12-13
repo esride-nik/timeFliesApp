@@ -43,9 +43,50 @@ class TimeFlies extends declared(Widget) {
     @property()
     _zoomOutLevel: number;
 
+    // Feature selection is not yet supported in JS4, so we can't select a feature on the layer and just display the popup. We need to care for the display ourselves instead.
     @property()
     @renderable()
     fid: number;
+
+    @property()
+    @renderable()
+    date: string;
+
+    @property()
+    @renderable()
+    infos: string;
+
+    @property()
+    @renderable()
+    location: string;
+
+    @property()
+    @renderable()
+    nr: number;
+
+    @property()
+    @renderable()
+    ort: string;
+
+    @property()
+    @renderable()
+    plz: string;
+
+    @property()
+    @renderable()
+    stagetime: string;
+
+    @property()
+    @renderable()
+    tagebuch: string;
+    
+    @property()
+    @renderable()
+    video: string;
+
+    @property()
+    @renderable()
+    wochentag: string;
 
     constructor(params: TimeFliesParams) {
         super();
@@ -76,10 +117,23 @@ class TimeFlies extends declared(Widget) {
     iterateThroughFeaturesSynchronously(features: Graphic[], i: number) {
         // don't iterate via features.map(), because this executes asynchonously and doesn't wait for the animation to finish
         if (features.length>i) {
+            this.fid = (features[i] as Graphic).attributes.FID;
+            
+            // Feature selection is not yet supported in JS4, so we can't select a feature on the layer and just display the popup. We need to care for the display ourselves instead.
+            var dateObj = new Date((features[i] as Graphic).attributes.date);
+            this.date = dateObj.getDate() + "." + (dateObj.getMonth()+1) + "." + dateObj.getFullYear();
+            this.infos = (features[i] as Graphic).attributes.infos;
+            this.location = (features[i] as Graphic).attributes.location___veranstaltung;
+            this.nr = (features[i] as Graphic).attributes.nr_;
+            this.ort = (features[i] as Graphic).attributes.ort;
+            this.plz = (features[i] as Graphic).attributes.plz;
+            this.stagetime = (features[i] as Graphic).attributes.stagetime;
+            this.tagebuch = (features[i] as Graphic).attributes.tagebuch;
+            this.video = (features[i] as Graphic).attributes.video;
+            this.wochentag = (features[i] as Graphic).attributes.wochentag;
+            
             this.zoomAndCenterOnFeature(features[i]).then((evt: any) => {
-                    console.log("zoomAndCenterOnFeature then", evt);
                     i++;
-                    this.fid = (features[i] as Graphic).attributes.FID;
                     this.iterateThroughFeaturesSynchronously(features, i);
                 }
             );
@@ -121,7 +175,15 @@ class TimeFlies extends declared(Widget) {
             <div bind={this}
                 class={CSS.base}
                 classes={classes}>
-                Feature No.: {this.fid}<br/>
+                Gig No.: <b>{this.nr}<br />
+                {this.wochentag}, {this.date}<br />
+                {this.location}<br />
+                Ort: {this.ort}</b><br />
+                Infos: {this.infos}<br />
+                PLZ: {this.plz}<br />
+                Stagetime: {this.stagetime}<br />
+                Tagebuch: {this.tagebuch}<br />
+                Video: <iframe src={this.video} width='100%' height='100%' frameborder='0' gesture='media' allow='encrypted-media' allowfullscreen></iframe>
             </div>
         );    
     }
