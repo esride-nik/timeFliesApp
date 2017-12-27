@@ -36,6 +36,10 @@ body,
 .esride-time-flies {
   padding:6px;
 }
+.is-active {
+    background-color: transparent !important;
+    color:#0079c1 !important;
+}
 /* END own widgets */
 
 
