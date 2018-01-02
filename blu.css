@@ -40,6 +40,9 @@ body,
     background-color: transparent !important;
     color:#0079c1 !important;
 }
+.popupbtn {
+    float:right;
+}
 /* END own widgets */
 
 

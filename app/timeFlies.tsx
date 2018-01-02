@@ -11,6 +11,9 @@ import Accessor = require("esri/core/Accessor");
 import Deferred = require("dojo/Deferred");
 import dom = require("dojo/dom");
 import domClass = require("dojo/dom-class");
+import HorizontalSlider = require("dijit/form/HorizontalSlider");
+import HorizontalRule = require("dijit/form/HorizontalRule");
+import HorizontalRuleLabels = require("dijit/form/HorizontalRuleLabels");
 import { subclass, declared, property } from "esri/core/accessorSupport/decorators";
 import { renderable, tsx } from "esri/widgets/support/widget";
 
@@ -29,6 +32,9 @@ interface TimeFliesParams {
 
 @subclass("esride.widgets.TimeFlies")
 class TimeFlies extends declared(Widget) {
+
+    @property()
+    _slider: HorizontalSlider;
 
     @property()
     _animationPlaying: boolean;
@@ -211,6 +217,19 @@ class TimeFlies extends declared(Widget) {
 
     afterCreate() {
         console.log("afterCreate", this);
+
+        this._slider = new HorizontalSlider({
+            name: "slider",
+            value: 5,
+            minimum: -10,
+            maximum: 10,
+            intermediateChanges: true,
+            style: "width:300px;",
+            class: "claro",
+            onChange: function(value: any){
+                console.log("sliderValue change", value);
+            }
+        }, "horizontalSlider").startup();
     }
 
     render() {
@@ -226,7 +245,7 @@ class TimeFlies extends declared(Widget) {
                 class="content"
                 dangerouslySetInnerHTML={{ __html: '<a target="_blank" href="http://www.colognenightofmusic.de">cologne night of music</a>'}}
               />
-              <p>
+              <p class="popupbtn">
                 <button bind={this} onclick={this.resumeFlight} class="btn is-active" id="btnResume"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M6 0l22 16.002L6 32V0z"/></svg></button>
                 <button bind={this}  onclick={this.pauseFlight} class="btn" id="btnPause"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M26 4v24h-6V4h6zM6 28h6V4H6v24z"/></svg></button>
               </p>
@@ -240,6 +259,8 @@ class TimeFlies extends declared(Widget) {
                 Stagetime: {this.stagetime}<br />
                 Tagebuch: {this.tagebuch}<br />
                 Video: <iframe src={this.video} width='100%' height='100%' frameborder='0' gesture='media' allow='encrypted-media' allowfullscreen></iframe>
+
+                <div id='horizontalSlider'></div>
             </div>
         );    
     }
