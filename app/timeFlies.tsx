@@ -218,16 +218,29 @@ class TimeFlies extends declared(Widget) {
     }
 
     resumeFlight() {
-        domClass.add(dom.byId("btnResume"), "is-active");
-        domClass.remove(dom.byId("btnPause"), "is-active");
-        this._animationPlaying = true;
+        this.activatePlay();
         if (this._currentFeature >= this._features.length) {
             this._currentFeature = 0;
         }
         this.iterateThroughFeaturesSynchronously(this._currentFeature);
     }
 
+    activatePlay() {
+        domClass.add(dom.byId("btnResume"), "is-active");
+        domClass.remove(dom.byId("btnPause"), "is-active");
+        this._animationPlaying = true;
+    }
+
+    reverse() {
+        this.activatePlay();
+        if (this._currentFeature >= this._features.length+10) {
+            this._currentFeature = -1;
+        }
+        this.iterateThroughFeaturesSynchronously(this._currentFeature+10);
+    }
+
     toPrevious() {
+        this.activatePlay();
         if (this._currentFeature >= this._features.length) {
             this._currentFeature = -1;
         }
@@ -235,10 +248,19 @@ class TimeFlies extends declared(Widget) {
     }
 
     toNext() {
+        this.activatePlay();
         if (this._currentFeature==0) {
             this._currentFeature = this._features.length+1; 
         }
         this.iterateThroughFeaturesSynchronously(this._currentFeature-1);
+    }
+
+    forward() {
+        this.activatePlay();
+        if (this._currentFeature-10<=0) {
+            this._currentFeature = this._features.length+1; 
+        }
+        this.iterateThroughFeaturesSynchronously(this._currentFeature-10);
     }
 
     initTimeline() {
@@ -285,10 +307,12 @@ class TimeFlies extends declared(Widget) {
             
               <p class="popupcontent">
                 <p class="popupbtn">
+                    <button bind={this} onclick={this.reverse} class="btn" id="btnRev"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M18 6v20L4 16.002 18 6zm8 0h-4v20h4V6z"/></svg></button>
                     <button bind={this} onclick={this.toPrevious} class="btn" id="btnPrev"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M25 28h-5L8 16 20 4h5L13 16l12 12z"/></svg></button>
                     <button bind={this} onclick={this.resumeFlight} class="btn is-active" id="btnResume"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M6 0l22 16.002L6 32V0z"/></svg></button>
                     <button bind={this}  onclick={this.pauseFlight} class="btn" id="btnPause"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M26 4v24h-6V4h6zM6 28h6V4H6v24z"/></svg></button>
                     <button bind={this} onclick={this.toNext} class="btn" id="btnNext"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M7 4h5l12 12-12 12H7l12-12L7 4z"/></svg></button>
+                    <button bind={this} onclick={this.forward} class="btn" id="btnForward"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M28 16.002L14 26V6l14 10.002zM6 26h4V6H6v20z"/></svg></button>
                 </p>
                 <i>#{this.nr}</i> {this.wochentag}, {this.date} / {this.stagetime}<br />
                 <b>{this.ort} {this.plz}, {this.location}</b><br />
