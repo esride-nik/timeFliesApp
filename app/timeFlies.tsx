@@ -11,9 +11,7 @@ import Accessor = require("esri/core/Accessor");
 import Deferred = require("dojo/Deferred");
 import dom = require("dojo/dom");
 import domClass = require("dojo/dom-class");
-import HorizontalSlider = require("dijit/form/HorizontalSlider");
-import HorizontalRule = require("dijit/form/HorizontalRule");
-import HorizontalRuleLabels = require("dijit/form/HorizontalRuleLabels");
+import vis = require("http://visjs.org/dist/vis.js");
 import { subclass, declared, property } from "esri/core/accessorSupport/decorators";
 import { renderable, tsx } from "esri/widgets/support/widget";
 
@@ -34,7 +32,7 @@ interface TimeFliesParams {
 class TimeFlies extends declared(Widget) {
 
     @property()
-    _slider: HorizontalSlider;
+    _timeline: vis.Timeline;
 
     @property()
     _animationPlaying: boolean;
@@ -130,6 +128,7 @@ class TimeFlies extends declared(Widget) {
         this._flightLayer.queryFeatures(query).then((results: FeatureSet) => {
           console.log("TimeFlies Result", results.features);
           this._features = results.features;
+          this.initTimeline();
           this.iterateThroughFeaturesSynchronously(0);
 
           // ToDo: Create animation for alle features
@@ -137,6 +136,16 @@ class TimeFlies extends declared(Widget) {
           // ToDo: Play videos automatically
           // ToDo: create route to all features, put into FL with ID corresponding to point and highlight route feature on each animation
         });
+    }
+
+    formatDateReadable(dateString: string) {
+        var dateObj = new Date(dateString);
+        return dateObj.getDate() + "." + (dateObj.getMonth()+1) + "." + dateObj.getFullYear();
+    }
+
+    formatDateYmd(dateString: string) {
+        var dateObj = new Date(dateString);
+        return dateObj.getFullYear() + "-" + (dateObj.getMonth()+1) + "-" + dateObj.getDate();
     }
     
     iterateThroughFeaturesSynchronously(i: number) {
@@ -147,8 +156,7 @@ class TimeFlies extends declared(Widget) {
             this.fid = (features[i] as Graphic).attributes.FID;
             
             // Feature selection is not yet supported in JS4, so we can't select a feature on the layer and just display the popup. We need to care for the display ourselves instead.
-            var dateObj = new Date((features[i] as Graphic).attributes.date);
-            this.date = dateObj.getDate() + "." + (dateObj.getMonth()+1) + "." + dateObj.getFullYear();
+            this.date = this.formatDateReadable((features[i] as Graphic).attributes.date);
             this.infos = (features[i] as Graphic).attributes.infos;
             this.location = (features[i] as Graphic).attributes.location___veranstaltung;
             this.nr = (features[i] as Graphic).attributes.nr_;
@@ -159,6 +167,9 @@ class TimeFlies extends declared(Widget) {
             this.video = (features[i] as Graphic).attributes.video;
             this.wochentag = (features[i] as Graphic).attributes.wochentag;
             
+            this._timeline.setSelection([i+1], {
+                focus: true
+              });
             this.zoomAndCenterOnFeature(features[i]).then((evt: any) => {
                     i++;
                     this.iterateThroughFeaturesSynchronously(i);
@@ -215,21 +226,46 @@ class TimeFlies extends declared(Widget) {
         this.iterateThroughFeaturesSynchronously(this._currentFeature);
     }
 
-    afterCreate() {
-        console.log("afterCreate", this);
+    initTimeline() {
+        console.log("initTimeline", this);
 
-        this._slider = new HorizontalSlider({
-            name: "slider",
-            value: 5,
-            minimum: -10,
-            maximum: 10,
-            intermediateChanges: true,
-            style: "width:300px;",
-            class: "claro",
-            onChange: function(value: any){
-                console.log("sliderValue change", value);
-            }
-        }, "horizontalSlider").startup();
+        // DOM element where the Timeline will be attached
+        var container = document.getElementById('visualization');
+
+        /*
+            FID:1
+            date:1071964800000
+            infos:"unser abschiedskonzert"
+            location___veranstaltung:"base(ex-barbarossakeller)"
+            nr_:"136"
+            ort:"sinzig"
+            plz:"53..."
+            stagetime:"<img src='blu-abschied-thumb.jpg' border='0' />"
+            tagebuch:"flyer.htm"
+            video:"https://www.youtube.com/embed/AoXeQfmci88"
+            wochentag:"sonntag"
+        */
+        
+            var itemsArray = this._features.map((graphic: Graphic) => {
+                return {
+                    id: graphic.attributes.FID,
+                    content: '<a href="#">' + graphic.attributes.ort + '</a>',
+                    start: this.formatDateYmd(graphic.attributes.date)
+                };
+            });
+            // Create a DataSet (allows two way data-binding)        
+            var items = new vis.DataSet(itemsArray);
+        
+            // Configuration for the Timeline
+            var options = {
+                maxHeight: 180,
+                width: 800
+            };
+        
+            // Create a Timeline
+            this._timeline = new vis.Timeline(container, items, options);
+            /* this._timeline.fit();
+            this._timeline.zoomIn(0.5); */
     }
 
     render() {
@@ -238,7 +274,7 @@ class TimeFlies extends declared(Widget) {
             [CSS.esrideTimeFlies]: true
         };
         return (
-            <div bind={this} afterCreate={this.afterCreate}
+            <div bind={this}
                 class={CSS.base}
                 classes={classes}>
                 <div
@@ -260,7 +296,8 @@ class TimeFlies extends declared(Widget) {
                 Tagebuch: {this.tagebuch}<br />
                 Video: <iframe src={this.video} width='100%' height='100%' frameborder='0' gesture='media' allow='encrypted-media' allowfullscreen></iframe>
 
-                <div id='horizontalSlider'></div>
+                <link href="http://visjs.org/dist/vis.css" rel="stylesheet" type="text/css" />
+                <div id="visualization"></div>
             </div>
         );    
     }
