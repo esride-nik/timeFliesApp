@@ -51,6 +51,7 @@ body,
     float:right;
 }
 .popupcontent {
+    margin-bottom:5px;
     display:block;
 }
 /* END own widgets */

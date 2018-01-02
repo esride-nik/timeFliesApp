@@ -221,17 +221,24 @@ class TimeFlies extends declared(Widget) {
         domClass.add(dom.byId("btnResume"), "is-active");
         domClass.remove(dom.byId("btnPause"), "is-active");
         this._animationPlaying = true;
+        if (this._currentFeature >= this._features.length) {
+            this._currentFeature = 0;
+        }
         this.iterateThroughFeaturesSynchronously(this._currentFeature);
     }
 
     toPrevious() {
+        if (this._currentFeature >= this._features.length) {
+            this._currentFeature = -1;
+        }
         this.iterateThroughFeaturesSynchronously(this._currentFeature+1);
     }
 
     toNext() {
-        if (this._currentFeature>0) {
-            this.iterateThroughFeaturesSynchronously(this._currentFeature-1);
+        if (this._currentFeature==0) {
+            this._currentFeature = this._features.length+1; 
         }
+        this.iterateThroughFeaturesSynchronously(this._currentFeature-1);
     }
 
     initTimeline() {
@@ -239,41 +246,27 @@ class TimeFlies extends declared(Widget) {
 
         // DOM element where the Timeline will be attached
         var container = document.getElementById('visualization');
-
-        /*
-            FID:1
-            date:1071964800000
-            infos:"unser abschiedskonzert"
-            location___veranstaltung:"base(ex-barbarossakeller)"
-            nr_:"136"
-            ort:"sinzig"
-            plz:"53..."
-            stagetime:"<img src='blu-abschied-thumb.jpg' border='0' />"
-            tagebuch:"flyer.htm"
-            video:"https://www.youtube.com/embed/AoXeQfmci88"
-            wochentag:"sonntag"
-        */
-        
-            var itemsArray = this._features.map((graphic: Graphic) => {
-                return {
-                    id: graphic.attributes.FID,
-                    content: '<a href="#">' + graphic.attributes.ort + '</a>',
-                    start: this.formatDateYmd(graphic.attributes.date)
-                };
-            });
-            // Create a DataSet (allows two way data-binding)        
-            var items = new vis.DataSet(itemsArray);
-        
-            // Configuration for the Timeline
-            var options = {
-                maxHeight: 100,
-                width: 800
+            
+        var itemsArray = this._features.map((graphic: Graphic) => {
+            return {
+                id: graphic.attributes.FID,
+                content: '<a href="#">' + graphic.attributes.ort + '</a>',
+                start: this.formatDateYmd(graphic.attributes.date)
             };
-        
-            // Create a Timeline
-            this._timeline = new vis.Timeline(container, items, options);
-            this._timeline.fit();
-            this._timeline.zoomIn(50);
+        });
+        // Create a DataSet (allows two way data-binding)        
+        var items = new vis.DataSet(itemsArray);
+    
+        // Configuration for the Timeline
+        var options = {
+            maxHeight: 100,
+            width: 800
+        };
+    
+        // Create a Timeline
+        this._timeline = new vis.Timeline(container, items, options);
+        this._timeline.fit();
+        this._timeline.zoomIn(50);
     }
 
     render() {
@@ -287,7 +280,6 @@ class TimeFlies extends declared(Widget) {
                 classes={classes}>
                 <div
                 class="content"
-                dangerouslySetInnerHTML={{ __html: '<a target="_blank" href="http://www.colognenightofmusic.de">cologne night of music</a>'}}
               />
               <iframe class="popupvid" src={this.video} width='50%' height='50%' frameborder='0' gesture='media' allow='encrypted-media' allowfullscreen></iframe>
             
