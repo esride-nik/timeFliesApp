@@ -43,6 +43,9 @@ body,
 .popupbtn {
     float:right;
 }
+.popupvid {
+    float:left;
+}
 /* END own widgets */
 
 

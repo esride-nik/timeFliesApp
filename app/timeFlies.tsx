@@ -264,8 +264,8 @@ class TimeFlies extends declared(Widget) {
         
             // Create a Timeline
             this._timeline = new vis.Timeline(container, items, options);
-            /* this._timeline.fit();
-            this._timeline.zoomIn(0.5); */
+            this._timeline.fit();
+            this._timeline.zoomIn(50);
     }
 
     render() {
@@ -285,16 +285,12 @@ class TimeFlies extends declared(Widget) {
                 <button bind={this} onclick={this.resumeFlight} class="btn is-active" id="btnResume"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M6 0l22 16.002L6 32V0z"/></svg></button>
                 <button bind={this}  onclick={this.pauseFlight} class="btn" id="btnPause"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M26 4v24h-6V4h6zM6 28h6V4H6v24z"/></svg></button>
               </p>
-                Gig No.: <b>{this.nr}<br />
-                {this.wochentag}, {this.date}<br />
-                {this.location}<br />
-                Ort: {this.ort}</b><br />
-                Infos: {this.infos}<br />
-                Infos: <div dangerouslySetInnerHTML={this.createMarkup()} /><br />
-                PLZ: {this.plz}<br />
-                Stagetime: {this.stagetime}<br />
+                <iframe class="popupvid" src={this.video} width='50%' height='50%' frameborder='0' gesture='media' allow='encrypted-media' allowfullscreen></iframe>
+                
+                <i>#{this.nr}</i> {this.wochentag}, {this.date} / {this.stagetime}<br />
+                <b>{this.ort} {this.plz}, {this.location}</b><br />
+                {this.infos}<br />
                 Tagebuch: {this.tagebuch}<br />
-                Video: <iframe src={this.video} width='100%' height='100%' frameborder='0' gesture='media' allow='encrypted-media' allowfullscreen></iframe>
 
                 <link href="http://visjs.org/dist/vis.css" rel="stylesheet" type="text/css" />
                 <div id="visualization"></div>
