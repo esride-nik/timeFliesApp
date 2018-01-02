@@ -36,15 +36,22 @@ body,
 .esride-time-flies {
   padding:6px;
 }
+.btn {
+    border:1px solid #eee;
+}
 .is-active {
     background-color: transparent !important;
     color:#0079c1 !important;
 }
 .popupbtn {
-    float:right;
+    margin-bottom:5px;
+    display:block;
 }
 .popupvid {
-    float:left;
+    float:right;
+}
+.popupcontent {
+    display:block;
 }
 /* END own widgets */
 

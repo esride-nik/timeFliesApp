@@ -212,18 +212,26 @@ class TimeFlies extends declared(Widget) {
     }
 
     pauseFlight() {
-        console.log("pause", this);
         domClass.add(dom.byId("btnPause"), "is-active");
         domClass.remove(dom.byId("btnResume"), "is-active");
         this._animationPlaying = false;
     }
 
     resumeFlight() {
-        console.log("resume", this);
         domClass.add(dom.byId("btnResume"), "is-active");
         domClass.remove(dom.byId("btnPause"), "is-active");
         this._animationPlaying = true;
         this.iterateThroughFeaturesSynchronously(this._currentFeature);
+    }
+
+    toPrevious() {
+        this.iterateThroughFeaturesSynchronously(this._currentFeature+1);
+    }
+
+    toNext() {
+        if (this._currentFeature>0) {
+            this.iterateThroughFeaturesSynchronously(this._currentFeature-1);
+        }
     }
 
     initTimeline() {
@@ -258,7 +266,7 @@ class TimeFlies extends declared(Widget) {
         
             // Configuration for the Timeline
             var options = {
-                maxHeight: 180,
+                maxHeight: 100,
                 width: 800
             };
         
@@ -281,16 +289,20 @@ class TimeFlies extends declared(Widget) {
                 class="content"
                 dangerouslySetInnerHTML={{ __html: '<a target="_blank" href="http://www.colognenightofmusic.de">cologne night of music</a>'}}
               />
-              <p class="popupbtn">
-                <button bind={this} onclick={this.resumeFlight} class="btn is-active" id="btnResume"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M6 0l22 16.002L6 32V0z"/></svg></button>
-                <button bind={this}  onclick={this.pauseFlight} class="btn" id="btnPause"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M26 4v24h-6V4h6zM6 28h6V4H6v24z"/></svg></button>
-              </p>
-                <iframe class="popupvid" src={this.video} width='50%' height='50%' frameborder='0' gesture='media' allow='encrypted-media' allowfullscreen></iframe>
-                
+              <iframe class="popupvid" src={this.video} width='50%' height='50%' frameborder='0' gesture='media' allow='encrypted-media' allowfullscreen></iframe>
+            
+              <p class="popupcontent">
+                <p class="popupbtn">
+                    <button bind={this} onclick={this.toPrevious} class="btn" id="btnPrev"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M25 28h-5L8 16 20 4h5L13 16l12 12z"/></svg></button>
+                    <button bind={this} onclick={this.resumeFlight} class="btn is-active" id="btnResume"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M6 0l22 16.002L6 32V0z"/></svg></button>
+                    <button bind={this}  onclick={this.pauseFlight} class="btn" id="btnPause"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M26 4v24h-6V4h6zM6 28h6V4H6v24z"/></svg></button>
+                    <button bind={this} onclick={this.toNext} class="btn" id="btnNext"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M7 4h5l12 12-12 12H7l12-12L7 4z"/></svg></button>
+                </p>
                 <i>#{this.nr}</i> {this.wochentag}, {this.date} / {this.stagetime}<br />
                 <b>{this.ort} {this.plz}, {this.location}</b><br />
                 {this.infos}<br />
                 Tagebuch: {this.tagebuch}<br />
+              </p>
 
                 <link href="http://visjs.org/dist/vis.css" rel="stylesheet" type="text/css" />
                 <div id="visualization"></div>
