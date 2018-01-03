@@ -45,31 +45,6 @@ class Btw2017 extends _WidgetBase {
     private renderer: SimpleRenderer;
     private config: any;
     private blutourFLayer: FeatureLayer;
-/* 
-    private partycolors: PartyProperties = {
-        "afd": [0, 158, 224, 1.0],
-        "cducsu": [0, 0, 0, 1.0],
-        "fdp": [255, 237, 0, 1.0],
-        "spd": [226, 0, 26, 1.0],
-        "linke": [227, 6, 19, 1.0],
-        "gruene": [31, 175, 18, 1.0]
-        }
-    private partyname: PartyProperties = {
-        "afd":"AfD",
-        "cducsu": "CDU/CSU",
-        "fdp": "FDP",
-        "spd":"SPD",
-        "linke": "Die Linke",
-        "gruene": "B90/Die Grünen"
-        }
-    private partymax: PartyProperties = {
-        "afd": 36,
-        "cducsu": 55,
-        "fdp": 20,
-        "spd": 38,
-        "linke": 30,
-        "gruene": 22
-        } */
     
     constructor(args?: Array<any>) {
         super(lang.mixin({baseClass: "jimu-blu"}, args));
@@ -123,7 +98,7 @@ class Btw2017 extends _WidgetBase {
             // The clipping extent for the scene
             let btwExtent = { // autocasts as new Extent()
                 xmin: 653028.001899999,
-                ymin: 5986277.1178,
+                ymin: 5786277.1178,
                 xmax: 1674447.2595,
                 ymax: 7373205.4343,
                 spatialReference: { // autocasts as new SpatialReference()
@@ -131,7 +106,7 @@ class Btw2017 extends _WidgetBase {
                 }
             } as Extent;   // TS definitions don't support Extent autocast in ArcGIS JS 4.5 yet
     
-            var sceneView = this.createSceneView(webscene, btwExtent);
+            var sceneView = this.createSceneView(webscene);//, btwExtent);
     
             sceneView.then(function(evt: any) {
 /*                 var legend = new Legend({
@@ -167,69 +142,8 @@ class Btw2017 extends _WidgetBase {
 
         return infoTemplate;
     }
-/* 
-    createBlutourLayer() {
-        var party = "cducsu";
 
-        var btwLayer: FeatureLayer = new FeatureLayer({
-            url: "https://services.arcgis.com/OLiydejKCZTGhvWg/arcgis/rest/services/Wahlkreise_2017_amtlichesErgebnis/FeatureServer/0",
-            renderer: this.defineRenderer(party),
-            popupTemplate: this.defineInfoTemplate(party),
-            outFields: ["*"],
-        });
-
-        // ToDo: This was supposed to remove the loader when the 3D layer is rendered in the client and show it when the renderer is changed. But it doesn't do that.
-        var handle = btwLayer.watch('loadStatus', function(newValue, oldValue, property, object) {
-            console.log("loadStatus New value: ", newValue);      // The new value of the property
-            console.log("loadStatus Old value: ", oldValue);  // The previous value of the changed property
-            console.log("loadStatus Watched Property: ", property); 
-            console.log("loadStatus Watched Object: ", object);
-
-            if (newValue==="loaded") {
-                domClass.remove(dom.byId("loader"), "is-active");
-            }
-            else if (newValue==="loading") {
-                domClass.add(dom.byId("loader"), "is-active");
-            }
-           });
-
-        // Define elevationInfo and set it on the layer
-        var currentElevationInfo = {
-            mode: "relative-to-ground",
-            offset: 150,
-            featureExpressionInfo: {
-            expression: "Geometry($feature).z * 10"
-            },
-            unit: "meters"
-        };
-
-        btwLayer.elevationInfo = currentElevationInfo;
-
-        return btwLayer;
-    } */
-
-/*     createMap(btwLayer: FeatureLayer) {
-        var esrimap = new EsriMap({
-            layers: [btwLayer]
-        });
-
-        var tiledLayer = new WebTileLayer({
-            urlTemplate:
-              "http://{subDomain}.tile.stamen.com/toner/{level}/{col}/{row}.png",
-            subDomains: ["a", "b", "c", "d"],
-            copyright:
-              'Map tiles by <a href="http://stamen.com/">Stamen Design</a>, ' +
-              'under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. ' +
-              'Data by <a href="http://openstreetmap.org/">OpenStreetMap</a>, ' +
-              'under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.'
-          });
-        
-          esrimap.add(tiledLayer);
-
-        return esrimap;
-    } */
-
-    createSceneView(esrimap: EsriMap, btwExtent: Extent) {
+    createSceneView(esrimap: EsriMap, btwExtent?: Extent) {
         var sceneViewProperties: __esri.SceneViewProperties = {
             container: "viewDiv",
             map: esrimap,
@@ -249,13 +163,13 @@ class Btw2017 extends _WidgetBase {
             },
             camera: {
                 position: {
-                    latitude: 38.95,
-                    longitude: 10.23,
-                    z: 677567.35,
+                    latitude: 33.83,
+                    longitude: 9.92,
+                    z: 611856.12,
                     spatialReference: {wkid: 3857}
                 },
                 heading: 0.0,
-                tilt: 67.25
+                tilt: 75.00
             },
             environment: {
                 atmosphere: {
