@@ -158,7 +158,7 @@ class TimeFlies extends declared(Widget) {
             // Feature selection is not yet supported in JS4, so we can't select a feature on the layer and just display the popup. We need to care for the display ourselves instead.
             this.date = this.formatDateReadable((features[i] as Graphic).attributes.date);
             this.infos = (features[i] as Graphic).attributes.infos;
-            this.location = (features[i] as Graphic).attributes.location___veranstaltung;
+            this.location = (features[i] as Graphic).attributes.veranstaltung;
             this.nr = (features[i] as Graphic).attributes.nr_;
             this.ort = (features[i] as Graphic).attributes.ort;
             this.plz = (features[i] as Graphic).attributes.plz;
@@ -291,66 +291,37 @@ class TimeFlies extends declared(Widget) {
         this._timeline = new vis.Timeline(container, items, options);
     }
 
-    Welcome() {
-        return <h1>Welcome back!</h1>;
-    }
-
-    UserGreeting(props: any) {
-        return <h1>Welcome back!</h1>;
-      }
-            
-    GuestGreeting(props: any) {
-        return <h1>Please sign up.</h1>;
-      }
-    
-    Greeting(props: any) {
-        const isLoggedIn = props.isLoggedIn;
-        if (isLoggedIn) {
-          return this.UserGreeting(props);
-        }
-        return this.GuestGreeting(props);
-      }
-
     render() {
         const classes = {
             [CSS.base]: true,
             [CSS.esrideTimeFlies]: true
         };
-        var tagebuchLink: JSX.Element = "";
+
+        var tagebuchElement: JSX.Element = "";
         if (this.tagebuch && this.tagebuch.length>0)
-            tagebuchLink = <br />Tagebuch: <a href={this.tagebuch} target="_blank">Tagebuch</a>;
-        const Greeting = this.Greeting;
-        const Welcome = this.Welcome;
+            tagebuchElement = <p id="tagebuchElement"><br/> Tagebuch: <a href={this.tagebuch} target="_blank">Tagebuch</a></p>;
+
+        var stagetimeElement: JSX.Element = "";
+        if (this.stagetime && this.stagetime.length>0)
+            stagetimeElement = <p>/ {this.stagetime}</p>;
 
         return (
-            <div bind={this}
-                class={CSS.base}>
-                <div
-                    classes={classes}>
-                    <div
-                    class="content"
-                />
+            <div class={CSS.base}>
+                <div classes={classes}>
+                    <iframe class="popupvid" src={this.video} frameborder='0' gesture='media' allow='encrypted-media' allowfullscreen></iframe>
 
-                <p class="popupcontent">
-                    <iframe class="popupvid" src={this.video} width='70%' height='70%' frameborder='0' gesture='media' allow='encrypted-media' allowfullscreen></iframe>
+                    <p class="popupcontent">
+                        <i>#{this.nr}</i> {this.wochentag}, {this.date} {stagetimeElement}<br />
+                        <b>{this.ort} {this.plz}<br />
+                        {this.location}</b><br />
+                        {this.infos}{tagebuchElement}<br />
+                    </p>
                 
                     <p class="popupbtn">
-                        <button bind={this} onclick={this.reverse} class="btn" id="btnRev"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M18 6v20L4 16.002 18 6zm8 0h-4v20h4V6z"/></svg></button>
-                        <button bind={this} onclick={this.toPrevious} class="btn" id="btnPrev"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M25 28h-5L8 16 20 4h5L13 16l12 12z"/></svg></button>
-                        <button bind={this} onclick={this.resumeFlight} class="btn is-active" id="btnResume"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M6 0l22 16.002L6 32V0z"/></svg></button>
-                        <button bind={this}  onclick={this.pauseFlight} class="btn" id="btnPause"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M26 4v24h-6V4h6zM6 28h6V4H6v24z"/></svg></button>
-                        <button bind={this} onclick={this.toNext} class="btn" id="btnNext"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M7 4h5l12 12-12 12H7l12-12L7 4z"/></svg></button>
-                        <button bind={this} onclick={this.forward} class="btn" id="btnForward"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M28 16.002L14 26V6l14 10.002zM6 26h4V6H6v20z"/></svg></button>
+                        <button bind={this} onclick={this.reverse} class="btn" id="btnRev"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M18 6v20L4 16.002 18 6zm8 0h-4v20h4V6z"/></svg></button><button bind={this} onclick={this.toPrevious} class="btn" id="btnPrev"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M25 28h-5L8 16 20 4h5L13 16l12 12z"/></svg></button><button bind={this} onclick={this.resumeFlight} class="btn is-active" id="btnResume"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M6 0l22 16.002L6 32V0z"/></svg></button><button bind={this} onclick={this.pauseFlight} class="btn" id="btnPause"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M26 4v24h-6V4h6zM6 28h6V4H6v24z"/></svg></button><button bind={this} onclick={this.toNext} class="btn" id="btnNext"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M7 4h5l12 12-12 12H7l12-12L7 4z"/></svg></button><button bind={this} onclick={this.forward} class="btn" id="btnForward"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M28 16.002L14 26V6l14 10.002zM6 26h4V6H6v20z"/></svg></button>
                     </p>
-                    <i>#{this.nr}</i> {this.wochentag}, {this.date} / {this.stagetime}<br />
-                    <b>{this.ort} {this.plz}, {this.location}</b><br />
-                    {this.infos}{tagebuchLink}<br />
-                    {/* <Welcome /> */}
-                    {/* <Greeting isLoggedIn={true} /> */}
-                </p>
-
-                    <link href="http://visjs.org/dist/vis.css" rel="stylesheet" type="text/css" />
                 </div>
+                <link href="http://visjs.org/dist/vis.css" rel="stylesheet" type="text/css" />
                 <div id="visualization"></div>
             </div>
         );    

@@ -35,6 +35,7 @@ body,
 }
 .esride-time-flies {
   padding:6px;
+  min-width:400px;
 }
 .btn {
     border:1px solid #eee;
@@ -46,7 +47,32 @@ body,
 .popupbtn {
     margin-bottom:5px;
     display:block;
+    min-width:135px;
+    float:left;
 }
+
+.popupvid {
+    float:right;
+}
+@media all and (min-width: 800px) {
+    .popupvid {
+        width:400px;
+        height:300px;
+    }
+}
+@media all and (max-width: 800px) {
+    .popupvid {
+        width:300px;
+        height:225px;
+    }
+}
+@media all and (max-width: 500px) {
+    .popupvid {
+        width:200px;
+        height:150px;
+    }
+}
+
 .popupvid {
     float:right;
 }
