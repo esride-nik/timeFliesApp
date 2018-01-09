@@ -40,7 +40,7 @@ import on = require("dojo/on");
 import CameraStatus = require("./cameraStatus");
 import TimeFlies = require("./TimeFlies");
 
-class Btw2017 extends _WidgetBase {
+class BluTour extends _WidgetBase {
 
     private renderer: SimpleRenderer;
     private config: any;
@@ -78,7 +78,7 @@ class Btw2017 extends _WidgetBase {
         watchUtils.watch(webscene, "allLayers.length", evt => {
             console.log("watch webscene.allLayers", evt);
             var blutourLayer: Layer = webscene.layers.find(function(layer: Layer) {
-                return layer.title === "verpasst_03_date_hfl";
+                return layer.title === "bluTour_hfl";
                 });
             this.blutourFLayer = blutourLayer as FeatureLayer;
             this.blutourFLayer.popupTemplate = this.defineInfoTemplate();
@@ -87,7 +87,7 @@ class Btw2017 extends _WidgetBase {
                 flightLayer: this.blutourFLayer,
                 dateFieldName: "date",
                 sceneView: sceneView,
-                zoomInLevel: 10,
+                zoomInLevel: 13,
                 zoomOutLevel: 7
             });
             sceneView.ui.add(timeFlies, "bottom-left");
@@ -137,7 +137,6 @@ class Btw2017 extends _WidgetBase {
         var infoTemplate = new PopupTemplate({
             title: "{location / veranstaltung}, {ort}",
             content: '<iframe src="{video}&output=embed" width="100%" height="100%"></iframe>'
-            //content: '<iframe src="https://drive.google.com/file/d/0B71_N8y_7NupZkRhdWdkUnhSSlU/preview" width="100%" height="100%"></iframe>'
         });
 
         return infoTemplate;
@@ -181,61 +180,7 @@ class Btw2017 extends _WidgetBase {
 
         return new SceneView(sceneViewProperties);
     }
-            
-    postCreate() {
-        console.log("postCreate");
-    }
-    
-    defineRenderer(party: string) {
-        var vvSize = {
-        type: "size",
-        valueExpression: "($feature.btw17_WKR_" + party + "_zweit - $feature.btw17_WKR_" + party + "_zweit13) / $feature.btw17_WKR_" + party + "_zweit13 *100", //Arcade Expression
-        valueExpressionTitle: "Gewinn/Verlust",
-        stops: [
-        {
-            value: -150,
-            size: -200000,
-            label: "-150%"
-        },
-        {
-            value: 150,
-            size: 200000,
-            label: "+150%"
-        }]
-        };
-
-        var vvColor = {
-            type: "color",
-            field: "btw17_WKR_" + party + "_zweitp",
-            legendOptions: {
-                title: this.partyname[party]
-            },
-            stops: [
-            {
-                value: 0,
-                color: [255, 255, 255, 0.6],
-                label: "0%"
-            },
-            {
-                value: this.partymax[party],
-                color: this.partycolors[party],
-                label: this.partymax[party]+"%"
-            }]
-            };
-
-            var renderer = new SimpleRenderer({
-            symbol: new PolygonSymbol3D({
-            symbolLayers: [new ExtrudeSymbol3DLayer()]
-            }),
-            visualVariables: [vvSize, vvColor]
-        });
-        return renderer;
-    }
-}
-
-interface PartyProperties {
-    [propName: string]: string | number | number[];
 }
 
 // startup class
-let btw2017 = new Btw2017();
+let bluTour = new BluTour();
