@@ -40,6 +40,9 @@ body,
 .esride-time-flies a {
   text-decoration:underline !important;
 }
+.esride-time-flies div {
+  display:inline-block;
+}
 .btn {
     border:1px solid #eee;
 }

@@ -12,7 +12,7 @@ import Deferred = require("dojo/Deferred");
 import dom = require("dojo/dom");
 import domClass = require("dojo/dom-class");
 import domConstruct = require("dojo/dom-construct");
-import vis = require("vis.js");
+import vis = require("https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js");
 import { subclass, declared, property } from "esri/core/accessorSupport/decorators";
 import { renderable, tsx } from "esri/widgets/support/widget";
 
@@ -300,17 +300,20 @@ class TimeFlies extends declared(Widget) {
         var jsxElement: JSX.Element = "";
         if (htmlElement) {
             if (htmlElement.nodeName==="A") {
-                jsxElement = this.createLinkElement(this.veranstaltung as HTMLAnchorElement, "veranstaltung");
+                jsxElement = this.createLinkElement(htmlElement as HTMLAnchorElement, "veranstaltung");
             }
             else if (htmlElement.nodeName==="#document-fragment" && htmlElement.hasChildNodes()) {
                 var returnValue = [];
                 for (var i = 0; i < htmlElement.childNodes.length; i++) {
+                    if (i>0) {
+                        returnValue.push(" ");
+                    }
                     returnValue.push(this.analyzeHtmlElement(htmlElement.childNodes[i] as HTMLElement, key));
                   }
                 return returnValue;
             }
-            else if (htmlElement.nodeName==="#text" && htmlElement.textContent) {
-                jsxElement = <div key="veranstaltung">{this.veranstaltung.textContent}</div>;
+            else if (htmlElement.nodeName==="#text" && htmlElement.textContent && htmlElement.textContent!="null") {
+                jsxElement = <div key={key}>{htmlElement.textContent}</div>;
             }
         }
         return jsxElement;
@@ -340,17 +343,18 @@ class TimeFlies extends declared(Widget) {
                     <iframe class="popupvid" src={this.video} frameborder='0' gesture='media' allow='encrypted-media' allowfullscreen></iframe>
 
                     <p class="popupcontent">
-                        <i>#{this.nr}</i> {this.wochentag}, {this.date} {stagetimeElement}
+                        <i>#{this.nr}</i> {this.wochentag}, {this.date} {stagetimeElement}<br />
                         <div><b>{this.plz} {this.ort}<br />
-                        {veranstaltungElement}</b></div>
-                        {infosElement}{tagebuchElement}
+                        {veranstaltungElement}</b></div><br />
+                        {infosElement}<br />
+                        {tagebuchElement}
                     </p>
                 
                     <p class="popupbtn">
                         <button bind={this} onclick={this.reverse} class="btn" id="btnRev"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M18 6v20L4 16.002 18 6zm8 0h-4v20h4V6z"/></svg></button><button bind={this} onclick={this.toPrevious} class="btn" id="btnPrev"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M25 28h-5L8 16 20 4h5L13 16l12 12z"/></svg></button><button bind={this} onclick={this.resumeFlight} class="btn is-active" id="btnResume"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M6 0l22 16.002L6 32V0z"/></svg></button><button bind={this} onclick={this.pauseFlight} class="btn" id="btnPause"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M26 4v24h-6V4h6zM6 28h6V4H6v24z"/></svg></button><button bind={this} onclick={this.toNext} class="btn" id="btnNext"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M7 4h5l12 12-12 12H7l12-12L7 4z"/></svg></button><button bind={this} onclick={this.forward} class="btn" id="btnForward"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" class="svg-icon"><path d="M28 16.002L14 26V6l14 10.002zM6 26h4V6H6v20z"/></svg></button>
                     </p>
                 </div>
-                <link href="http://visjs.org/dist/vis.css" rel="stylesheet" type="text/css" />
+                <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet" type="text/css" />
                 <div id="visualization"></div>
             </div>
         );    
