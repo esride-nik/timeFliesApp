@@ -325,6 +325,16 @@ class TimeFlies extends declared(Widget) {
             [CSS.esrideTimeFlies]: true
         };
 
+        var numberElement: JSX.Element = "";
+        if (this.nr && this.nr.length>0) {
+            numberElement = <i key="number">#{this.nr}</i>;
+        }
+
+        var dayAndDateElement: JSX.Element = "";
+        if (this.wochentag && this.wochentag.length>0 && this.date && this.date.length>0) {
+            dayAndDateElement = <div key="dayAndDate">{this.wochentag}, {this.date}</div>;
+        }
+
         var tagebuchElement: JSX.Element = "";
         if (this.tagebuch && this.tagebuch.length>0)
             tagebuchElement = <div key="tagebuch"><a href={this.tagebuch} target="_blank">Tagebuch</a></div>;
@@ -343,7 +353,7 @@ class TimeFlies extends declared(Widget) {
                     <iframe class="popupvid" src={this.video} frameborder='0' gesture='media' allow='encrypted-media' allowfullscreen></iframe>
 
                     <p class="popupcontent">
-                        <i>#{this.nr}</i> {this.wochentag}, {this.date} {stagetimeElement}<br />
+                        {numberElement} {dayAndDateElement} {stagetimeElement}<br />
                         <div><b>{this.plz} {this.ort}<br />
                         {veranstaltungElement}</b></div><br />
                         {infosElement}<br />
