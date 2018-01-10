@@ -39,6 +39,9 @@ class TimeFlies extends declared(Widget) {
     _animationPlaying: boolean;
 
     @property()
+    _animateOnce: boolean;
+
+    @property()
     _currentFeature: number;
 
     @property()
@@ -132,8 +135,6 @@ class TimeFlies extends declared(Widget) {
           this.initTimeline();
           this.iterateThroughFeaturesSynchronously(0);
 
-          // ToDo: Create animation for alle features
-          // ToDo: Open popups automatically
           // ToDo: Play videos automatically
           // ToDo: create route to all features, put into FL with ID corresponding to point and highlight route feature on each animation
         });
@@ -153,7 +154,7 @@ class TimeFlies extends declared(Widget) {
         var features: Graphic[] = this._features;
         this._currentFeature = i;
         // don't iterate via features.map(), because this executes asynchonously and doesn't wait for the animation to finish
-        if (features.length>i && this._animationPlaying) {
+        if (features.length>i && (this._animationPlaying || this._animateOnce)) {
             this.fid = (features[i] as Graphic).attributes.FID;
             
             // Feature selection is not yet supported in JS4, so we can't select a feature on the layer and just display the popup. We need to care for the display ourselves instead.
@@ -173,7 +174,9 @@ class TimeFlies extends declared(Widget) {
               });
             this.zoomAndCenterOnFeature(features[i]).then((evt: any) => {
                     i++;
-                    this.iterateThroughFeaturesSynchronously(i);
+                    if (this._animationPlaying) {
+                        this.iterateThroughFeaturesSynchronously(i);
+                    }
                 }
             );
         }
@@ -233,7 +236,7 @@ class TimeFlies extends declared(Widget) {
     }
 
     reverse() {
-        this.activatePlay();
+        this._animateOnce = true;
         if (this._currentFeature >= this._features.length+10) {
             this._currentFeature = -1;
         }
@@ -241,7 +244,7 @@ class TimeFlies extends declared(Widget) {
     }
 
     toPrevious() {
-        this.activatePlay();
+        this._animateOnce = true;
         if (this._currentFeature >= this._features.length) {
             this._currentFeature = -1;
         }
@@ -249,7 +252,7 @@ class TimeFlies extends declared(Widget) {
     }
 
     toNext() {
-        this.activatePlay();
+        this._animateOnce = true;
         if (this._currentFeature==0) {
             this._currentFeature = this._features.length+1; 
         }
@@ -257,7 +260,7 @@ class TimeFlies extends declared(Widget) {
     }
 
     forward() {
-        this.activatePlay();
+        this._animateOnce = true;
         if (this._currentFeature-10<=0) {
             this._currentFeature = this._features.length+1; 
         }
@@ -326,7 +329,7 @@ class TimeFlies extends declared(Widget) {
         };
 
         var numberElement: JSX.Element = "";
-        if (this.nr && this.nr.length>0) {
+        if (this.nr) {
             numberElement = <i key="number">#{this.nr}</i>;
         }
 
@@ -353,9 +356,9 @@ class TimeFlies extends declared(Widget) {
                     <iframe class="popupvid" src={this.video} frameborder='0' gesture='media' allow='encrypted-media' allowfullscreen></iframe>
 
                     <p class="popupcontent">
-                        {numberElement} {dayAndDateElement} {stagetimeElement}<br />
-                        <div><b>{this.plz} {this.ort}<br />
-                        {veranstaltungElement}</b></div><br />
+                        {numberElement}<br />
+                        {dayAndDateElement} {stagetimeElement}<br />
+                        <div><b>{this.plz} {this.ort} {veranstaltungElement}</b></div><br />
                         {infosElement}<br />
                         {tagebuchElement}
                     </p>
