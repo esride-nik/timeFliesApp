@@ -37,6 +37,9 @@ body,
   padding:6px;
   min-width:400px;
 }
+.esride-time-flies a {
+  text-decoration:underline !important;
+}
 .btn {
     border:1px solid #eee;
 }
@@ -59,17 +62,26 @@ body,
         width:400px;
         height:300px;
     }
+    .popupcontent {
+        min-width:600px;
+    }
 }
 @media all and (max-width: 800px) {
     .popupvid {
         width:300px;
         height:225px;
     }
+    .popupcontent {
+        min-width:500px;
+    }
 }
 @media all and (max-width: 500px) {
     .popupvid {
         width:200px;
         height:150px;
+    }
+    .popupcontent {
+        min-width:400px;
     }
 }
 

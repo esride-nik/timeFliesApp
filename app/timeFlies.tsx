@@ -11,7 +11,8 @@ import Accessor = require("esri/core/Accessor");
 import Deferred = require("dojo/Deferred");
 import dom = require("dojo/dom");
 import domClass = require("dojo/dom-class");
-import vis = require("http://visjs.org/dist/vis.js");
+import domConstruct = require("dojo/dom-construct");
+import vis = require("vis.js");
 import { subclass, declared, property } from "esri/core/accessorSupport/decorators";
 import { renderable, tsx } from "esri/widgets/support/widget";
 
@@ -75,11 +76,11 @@ class TimeFlies extends declared(Widget) {
 
     @property()
     @renderable()
-    infos: string;
+    infos: HTMLElement;
 
     @property()
     @renderable()
-    location: string;
+    veranstaltung: HTMLElement;
 
     @property()
     @renderable()
@@ -157,8 +158,8 @@ class TimeFlies extends declared(Widget) {
             
             // Feature selection is not yet supported in JS4, so we can't select a feature on the layer and just display the popup. We need to care for the display ourselves instead.
             this.date = this.formatDateReadable((features[i] as Graphic).attributes.date);
-            this.infos = (features[i] as Graphic).attributes.infos;
-            this.location = (features[i] as Graphic).attributes.veranstaltung;
+            this.infos = domConstruct.toDom((features[i] as Graphic).attributes.infos);
+            this.veranstaltung = domConstruct.toDom((features[i] as Graphic).attributes.veranstaltung);
             this.nr = (features[i] as Graphic).attributes.nr_;
             this.ort = (features[i] as Graphic).attributes.ort;
             this.plz = (features[i] as Graphic).attributes.plz;
@@ -166,7 +167,7 @@ class TimeFlies extends declared(Widget) {
             this.tagebuch = (features[i] as Graphic).attributes.tagebuch;
             this.video = (features[i] as Graphic).attributes.video;
             this.wochentag = (features[i] as Graphic).attributes.wochentag;
-            
+
             this._timeline.setSelection([i+1], {
                 focus: true
               });
@@ -291,6 +292,30 @@ class TimeFlies extends declared(Widget) {
         this._timeline = new vis.Timeline(container, items, options);
     }
 
+    createLinkElement(htmlElement: HTMLAnchorElement, key: string): JSX.Element {
+        return <a href={htmlElement.href} target={htmlElement.target} key={key}>{htmlElement.textContent}</a>
+    }
+
+    analyzeHtmlElement(htmlElement: HTMLElement, key: string): JSX.Element {
+        var jsxElement: JSX.Element = "";
+        if (htmlElement) {
+            if (htmlElement.nodeName==="A") {
+                jsxElement = this.createLinkElement(this.veranstaltung as HTMLAnchorElement, "veranstaltung");
+            }
+            else if (htmlElement.nodeName==="#document-fragment" && htmlElement.hasChildNodes()) {
+                var returnValue = [];
+                for (var i = 0; i < htmlElement.childNodes.length; i++) {
+                    returnValue.push(this.analyzeHtmlElement(htmlElement.childNodes[i] as HTMLElement, key));
+                  }
+                return returnValue;
+            }
+            else if (htmlElement.nodeName==="#text" && htmlElement.textContent) {
+                jsxElement = <div key="veranstaltung">{this.veranstaltung.textContent}</div>;
+            }
+        }
+        return jsxElement;
+    }
+
     render() {
         const classes = {
             [CSS.base]: true,
@@ -299,11 +324,15 @@ class TimeFlies extends declared(Widget) {
 
         var tagebuchElement: JSX.Element = "";
         if (this.tagebuch && this.tagebuch.length>0)
-            tagebuchElement = <p id="tagebuchElement"><br/> Tagebuch: <a href={this.tagebuch} target="_blank">Tagebuch</a></p>;
+            tagebuchElement = <div key="tagebuch"><a href={this.tagebuch} target="_blank">Tagebuch</a></div>;
 
         var stagetimeElement: JSX.Element = "";
-        if (this.stagetime && this.stagetime.length>0)
-            stagetimeElement = <p>/ {this.stagetime}</p>;
+        if (this.stagetime && this.stagetime.length>0) {
+            stagetimeElement = <div key="stagetime">/ {this.stagetime}</div>;
+        }
+
+        var infosElement: JSX.Element = this.analyzeHtmlElement(this.infos, "infos");
+        var veranstaltungElement: JSX.Element = this.analyzeHtmlElement(this.veranstaltung, "veranstaltung");
 
         return (
             <div class={CSS.base}>
@@ -311,10 +340,10 @@ class TimeFlies extends declared(Widget) {
                     <iframe class="popupvid" src={this.video} frameborder='0' gesture='media' allow='encrypted-media' allowfullscreen></iframe>
 
                     <p class="popupcontent">
-                        <i>#{this.nr}</i> {this.wochentag}, {this.date} {stagetimeElement}<br />
-                        <b>{this.ort} {this.plz}<br />
-                        {this.location}</b><br />
-                        {this.infos}{tagebuchElement}<br />
+                        <i>#{this.nr}</i> {this.wochentag}, {this.date} {stagetimeElement}
+                        <div><b>{this.plz} {this.ort}<br />
+                        {veranstaltungElement}</b></div>
+                        {infosElement}{tagebuchElement}
                     </p>
                 
                     <p class="popupbtn">
