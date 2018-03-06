@@ -347,13 +347,21 @@ class TimeFlies extends declared(Widget) {
             stagetimeElement = <div key="stagetime">/ {this.stagetime}</div>;
         }
 
+        var videoElement: JSX.Element = "";
+        if (this.video) {
+            videoElement = <iframe class="popupvid" src={this.video} frameborder="0" allow="autoplay; encrypted-media" allowfullscreen="true"></iframe>
+        }
+        else {
+            videoElement = <img class="popupvid" src="pics/blulogo43.png" />
+        }
+
         var infosElement: JSX.Element = this.analyzeHtmlElement(this.infos, "infos");
         var veranstaltungElement: JSX.Element = this.analyzeHtmlElement(this.veranstaltung, "veranstaltung");
 
         return (
             <div class={CSS.base}>
                 <div classes={classes}>
-                    <iframe class="popupvid" src={this.video} frameborder='0' gesture='media' allow='encrypted-media' allowfullscreen></iframe>
+                    {videoElement}
 
                     <p class="popupcontent">
                         {numberElement}<br />
