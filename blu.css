@@ -33,10 +33,6 @@ body,
 .esride-camera-status {
   padding:6px;
 }
-.esride-time-flies {
-  padding:6px;
-  min-width:400px;
-}
 .esride-time-flies a {
   text-decoration:underline !important;
 }
@@ -50,50 +46,67 @@ body,
     background-color: transparent !important;
     color:#0079c1 !important;
 }
+
+.esride-time-flies {
+    padding:6px;
+}
 .popupbtn {
     margin-bottom:5px;
     display:block;
     min-width:135px;
     float:left;
 }
-
-.popupvid {
-    float:right;
+.popupcontent {
+    margin-bottom:5px;
+    display:block;
 }
 @media all and (min-width: 800px) {
     .popupvid {
         width:400px;
         height:300px;
+        float:right;
     }
     .popupcontent {
         min-width:600px;
+    }
+    .esride-time-flies {
+        min-width:400px;
     }
 }
 @media all and (max-width: 800px) {
     .popupvid {
         width:300px;
         height:225px;
+        float:right;
     }
     .popupcontent {
         min-width:500px;
     }
+    .esride-time-flies {
+        min-width:400px;
+    }
 }
 @media all and (max-width: 500px) {
     .popupvid {
-        width:200px;
-        height:150px;
+        width:133px;
+        height:100px;
     }
     .popupcontent {
         min-width:400px;
     }
-}
-
-.popupvid {
-    float:right;
-}
-.popupcontent {
-    margin-bottom:5px;
-    display:block;
+    .esride-time-flies {
+        width:330px;
+        min-width:100px;
+        font-size: xx-small !important;
+    }
+    .btn {
+        padding:0px !important;
+        padding: 0px 5px 0px 5px !important;
+    }
+    .vis-panel .vis-item .vis-item-content .vis-time-axis .vis-text {
+        padding: 0px !important;
+        font-size: xx-small !important;
+    }
 }
 .drive-viewer-video {
     height:290px !important;
