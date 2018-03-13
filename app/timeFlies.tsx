@@ -6,6 +6,7 @@ import SceneView = require("esri/views/SceneView");
 import Graphic = require("esri/Graphic");
 import Geometry = require("esri/geometry/Geometry");
 import Point = require("esri/geometry/Point");
+import Symbol = require("esri/symbols/Symbol");
 import SpatialReference = require("esri/geometry/SpatialReference");
 import Accessor = require("esri/core/Accessor");
 import Deferred = require("dojo/Deferred");
@@ -67,6 +68,9 @@ class TimeFlies extends declared(Widget) {
 
     @property()
     _zoomOutLevel: number;
+
+    @property()
+    _highlightSymbol: Symbol;
 
     // Feature selection is not yet supported in JS4, so we can't select a feature on the layer and just display the popup. We need to care for the display ourselves instead.
     @property()
@@ -187,6 +191,10 @@ class TimeFlies extends declared(Widget) {
 
     zoomAndCenterOnFeature(feature: Graphic): Deferred {
         console.log("centering on feature", feature, feature.attributes.ort, feature.attributes.infos);
+        
+        this._highlightSymbol = this._flightLayer.renderer.symbol;
+        this._highlightSymbol.color = [255,0,0,1];
+        feature.symbol = this._highlightSymbol;
 
         var latitute: number = 0;
         var longitude: number = 0;
@@ -212,6 +220,7 @@ class TimeFlies extends declared(Widget) {
     }
     
     createMarkup() {
+        // ToDo: This is just a DUMMY! Use attribute data
         return {__html: '<a target="_blank" href="http://www.colognenightofmusic.de">cologne night of music</a>'};
     }
 
