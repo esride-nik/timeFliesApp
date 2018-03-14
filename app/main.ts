@@ -94,43 +94,41 @@ class BluTour extends _WidgetBase {
         });
 
 
-    
-            // The clipping extent for the scene
-            let btwExtent = { // autocasts as new Extent()
-                xmin: 653028.001899999,
-                ymin: 5786277.1178,
-                xmax: 1674447.2595,
-                ymax: 7373205.4343,
-                spatialReference: { // autocasts as new SpatialReference()
-                    wkid: 102100
-                }
-            } as Extent;   // TS definitions don't support Extent autocast in ArcGIS JS 4.5 yet
-    
-            var sceneView = this.createSceneView(webscene);//, btwExtent);
-    
-            sceneView.then(function(evt: any) {
-/*                 var legend = new Legend({
-                    view: sceneView,
-                    layerInfos: [{
-                    layer: blutourFLayer,
-                    title: "Ergebnis pro Partei"
-                    }]
-                });
-                sceneView.ui.add(legend, "bottom-right"); */
-        
-                var cameraStatus = new CameraStatus({
-                    sceneView: sceneView
-                });
-                sceneView.ui.add(cameraStatus, "top-right");
-    
-                // Set up a home button for resetting the viewpoint to the intial extent
-                var homeBtn = new Home({
-                    view: sceneView,
-                    container: "homeDiv"
-                });
-            });
 
-        //});
+        // The clipping extent for the scene
+        let btwExtent = { // autocasts as new Extent()
+            xmin: 653028.001899999,
+            ymin: 5786277.1178,
+            xmax: 1674447.2595,
+            ymax: 7373205.4343,
+            spatialReference: { // autocasts as new SpatialReference()
+                wkid: 102100
+            }
+        } as Extent;   // TS definitions don't support Extent autocast in ArcGIS JS 4.5 yet
+
+        var sceneView = this.createSceneView(webscene);//, btwExtent);
+
+        sceneView.then(function(evt: any) {
+/*             var legend = new Legend({
+                view: sceneView,
+                layerInfos: [{
+                layer: this.blutourFLayer,
+                title: "Ergebnis pro Partei"
+                }]
+            });
+            sceneView.ui.add(legend, "bottom-right"); */
+    
+/*             var cameraStatus = new CameraStatus({
+                sceneView: sceneView
+            });
+            sceneView.ui.add(cameraStatus, "top-right"); */
+
+            // Set up a home button for resetting the viewpoint to the intial extent
+            var homeBtn = new Home({
+                view: sceneView,
+                container: "homeDiv"
+            });
+        });
     }
 
     defineInfoTemplate(): PopupTemplate {
