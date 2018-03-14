@@ -113,10 +113,6 @@ define(["require", "exports", "esri/widgets/Widget", "esri/layers/FeatureLayer",
             };
             return this._sceneView.goTo(this._goToTarget, this._goToOptions);
         };
-        TimeFlies.prototype.createMarkup = function () {
-            // ToDo: This is just a DUMMY! Use attribute data
-            return { __html: '<a target="_blank" href="http://www.colognenightofmusic.de">cologne night of music</a>' };
-        };
         TimeFlies.prototype.pauseFlight = function () {
             domClass.add(dom.byId("btnPause"), "is-active");
             domClass.remove(dom.byId("btnResume"), "is-active");
@@ -177,11 +173,12 @@ define(["require", "exports", "esri/widgets/Widget", "esri/layers/FeatureLayer",
             // Create a DataSet (allows two way data-binding)        
             var items = new vis.DataSet(itemsArray);
             // Configuration for the Timeline
+            // ToDo: Get start and end date from layer
             var options = {
                 maxHeight: 100,
                 width: '100%',
                 start: '2003-09-01 00:00:00',
-                end: '2003-12-31 00:00:00'
+                end: '2018-01-31 00:00:00'
             };
             // Create a Timeline
             this._timeline = new vis.Timeline(container, items, options);

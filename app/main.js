@@ -26,13 +26,13 @@ define(["require", "exports", "esri/config", "esri/views/SceneView", "esri/widge
         BluTour.prototype.initScene = function () {
             var _this = this;
             console.log("initScene");
+            // ToDo: implement setlist.fm search interface as an alternative to using a pre-defined WebScene
             var webscene = new WebScene({
                 portalItem: {
                     id: "70e76c55c7bc4644999d0891af6eb9d4"
                 }
             });
             console.log(webscene);
-            //webscene.watch("allLayers", function(evt) 
             watchUtils.watch(webscene, "allLayers.length", function (evt) {
                 console.log("watch webscene.allLayers", evt);
                 var blutourLayer = webscene.layers.find(function (layer) {
@@ -49,7 +49,6 @@ define(["require", "exports", "esri/config", "esri/views/SceneView", "esri/widge
                 });
                 sceneView.ui.add(timeFlies, "bottom-left");
             });
-            // The clipping extent for the scene
             var btwExtent = {
                 xmin: 653028.001899999,
                 ymin: 5786277.1178,
@@ -59,16 +58,8 @@ define(["require", "exports", "esri/config", "esri/views/SceneView", "esri/widge
                     wkid: 102100
                 }
             }; // TS definitions don't support Extent autocast in ArcGIS JS 4.5 yet
-            var sceneView = this.createSceneView(webscene); //, btwExtent);
+            var sceneView = this.createSceneView(webscene);
             sceneView.then(function (evt) {
-                /*             var legend = new Legend({
-                                view: sceneView,
-                                layerInfos: [{
-                                layer: this.blutourFLayer,
-                                title: "Ergebnis pro Partei"
-                                }]
-                            });
-                            sceneView.ui.add(legend, "bottom-right"); */
                 /*             var cameraStatus = new CameraStatus({
                                 sceneView: sceneView
                             });

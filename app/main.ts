@@ -66,14 +66,13 @@ class BluTour extends _WidgetBase {
     initScene() {
         console.log("initScene");
 
+        // ToDo: implement setlist.fm search interface as an alternative to using a pre-defined WebScene
         var webscene = new WebScene({
             portalItem: { // autocasts as new PortalItem()
               id: "70e76c55c7bc4644999d0891af6eb9d4"
             }
           });
           console.log(webscene);
-
-          //webscene.watch("allLayers", function(evt) 
 
         watchUtils.watch(webscene, "allLayers.length", evt => {
             console.log("watch webscene.allLayers", evt);
@@ -93,30 +92,19 @@ class BluTour extends _WidgetBase {
             sceneView.ui.add(timeFlies, "bottom-left");
         });
 
-
-
-        // The clipping extent for the scene
-        let btwExtent = { // autocasts as new Extent()
+        let btwExtent = {
             xmin: 653028.001899999,
             ymin: 5786277.1178,
             xmax: 1674447.2595,
             ymax: 7373205.4343,
-            spatialReference: { // autocasts as new SpatialReference()
+            spatialReference: {
                 wkid: 102100
             }
         } as Extent;   // TS definitions don't support Extent autocast in ArcGIS JS 4.5 yet
 
-        var sceneView = this.createSceneView(webscene);//, btwExtent);
+        var sceneView = this.createSceneView(webscene);
 
         sceneView.then(function(evt: any) {
-/*             var legend = new Legend({
-                view: sceneView,
-                layerInfos: [{
-                layer: this.blutourFLayer,
-                title: "Ergebnis pro Partei"
-                }]
-            });
-            sceneView.ui.add(legend, "bottom-right"); */
     
 /*             var cameraStatus = new CameraStatus({
                 sceneView: sceneView
