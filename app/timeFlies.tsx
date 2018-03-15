@@ -3,6 +3,7 @@ import FeatureLayer = require("esri/layers/FeatureLayer");
 import Query = require("esri/tasks/support/Query");
 import FeatureSet = require("esri/tasks/support/FeatureSet");
 import SceneView = require("esri/views/SceneView");
+import LayerView = require("esri/views/layers/LayerView");
 import Graphic = require("esri/Graphic");
 import Geometry = require("esri/geometry/Geometry");
 import Point = require("esri/geometry/Point");
@@ -28,6 +29,8 @@ interface TimeFliesParams {
     sceneView: SceneView;
     zoomInLevel: number;
     zoomOutLevel: number;
+    cameraTilt: number;
+    animationDurationMs: number;
 }
 
 @subclass("esride.widgets.TimeFlies")
@@ -64,10 +67,22 @@ class TimeFlies extends declared(Widget) {
     _sceneView: SceneView;
 
     @property()
+    _lyrView: LayerView;
+
+    @property()
+    _highlightSelect: any;
+
+    @property()
     _zoomInLevel: number;
 
     @property()
     _zoomOutLevel: number;
+
+    @property()
+    _cameraTilt: number;
+
+    @property()
+    _animationDurationMs: number;
 
     @property()
     _highlightSymbol: Symbol;
@@ -124,6 +139,8 @@ class TimeFlies extends declared(Widget) {
         this._sceneView = params.sceneView;
         this._zoomInLevel = params.zoomInLevel;
         this._zoomOutLevel = params.zoomOutLevel;
+        this._cameraTilt = params.cameraTilt;
+        this._animationDurationMs = params.animationDurationMs;
         this._animationPlaying = true;
         
         var query = new Query();
@@ -132,6 +149,12 @@ class TimeFlies extends declared(Widget) {
         query.returnGeometry = true;
         query.outFields = ["*"];
         console.log("TimeFlies Query", query);
+        
+        // highlight is set on the layerView. 
+        // Todo: layerView takes pretty long to load, so the first gig is never highlighted. We could wait for it to begin the animation, but is it worth it?
+        var whenLayerView = this._sceneView.whenLayerView(this._flightLayer).then(function(lyrView) {
+            console.log(lyrView);
+        });   
         
         this._flightLayer.queryFeatures(query).then((results: FeatureSet) => {
           console.log("TimeFlies Result", results.features);
@@ -192,14 +215,18 @@ class TimeFlies extends declared(Widget) {
     zoomAndCenterOnFeature(feature: Graphic): Deferred {
         console.log("centering on feature", feature, feature.attributes.ort, feature.attributes.infos);
         
-        this._highlightSymbol = this._flightLayer.renderer.symbol;
-        this._highlightSymbol.color = [255,0,0,1];
-        feature.symbol = this._highlightSymbol;
+        // use the objectID to highlight the feature
+        if (this._sceneView.layerViews.items.length > 0) {
+            if (this._highlightSelect) {
+                this._highlightSelect.remove();
+            };
+            this._highlightSelect = this._sceneView.layerViews.items[0].highlight(feature.attributes["FID"]);
+        }
 
         var latitute: number = 0;
         var longitude: number = 0;
 
-        // ToDo: Zoom to first feature (feature action "zoom" zooms in four LODs and centers on the selected feature)
+        // ToDo: refine animation. Camera should pan to next feature => adjust heading over time.
         if (feature.geometry.type==="point") {
             latitute = (feature.geometry as Point).latitude;
             longitude = (feature.geometry as Point).longitude;
@@ -208,11 +235,11 @@ class TimeFlies extends declared(Widget) {
         this._goToTarget = {
             zoom: this._zoomInLevel,
             center: [longitude, latitute],
-            tilt: 75
+            tilt: this._cameraTilt
         }
         this._goToOptions = {
             animate: true,
-            duration: 4000,
+            duration: this._animationDurationMs,
             easing: "in-out-cubic"
         }
 

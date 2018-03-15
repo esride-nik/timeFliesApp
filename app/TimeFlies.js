@@ -17,7 +17,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "esri/widgets/Widget", "esri/layers/FeatureLayer", "esri/tasks/support/Query", "esri/views/SceneView", "esri/symbols/Symbol", "dojo/dom", "dojo/dom-class", "dojo/dom-construct", "https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js", "esri/core/accessorSupport/decorators", "esri/widgets/support/widget"], function (require, exports, Widget, FeatureLayer, Query, SceneView, Symbol, dom, domClass, domConstruct, vis, decorators_1, widget_1) {
+define(["require", "exports", "esri/widgets/Widget", "esri/layers/FeatureLayer", "esri/tasks/support/Query", "esri/views/SceneView", "esri/views/layers/LayerView", "esri/symbols/Symbol", "dojo/dom", "dojo/dom-class", "dojo/dom-construct", "https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js", "esri/core/accessorSupport/decorators", "esri/widgets/support/widget"], function (require, exports, Widget, FeatureLayer, Query, SceneView, LayerView, Symbol, dom, domClass, domConstruct, vis, decorators_1, widget_1) {
     "use strict";
     var CSS = {
         base: "esri-widget",
@@ -32,6 +32,8 @@ define(["require", "exports", "esri/widgets/Widget", "esri/layers/FeatureLayer",
             _this._sceneView = params.sceneView;
             _this._zoomInLevel = params.zoomInLevel;
             _this._zoomOutLevel = params.zoomOutLevel;
+            _this._cameraTilt = params.cameraTilt;
+            _this._animationDurationMs = params.animationDurationMs;
             _this._animationPlaying = true;
             var query = new Query();
             query.where = "1=1";
@@ -39,6 +41,11 @@ define(["require", "exports", "esri/widgets/Widget", "esri/layers/FeatureLayer",
             query.returnGeometry = true;
             query.outFields = ["*"];
             console.log("TimeFlies Query", query);
+            // highlight is set on the layerView. 
+            // Todo: layerView takes pretty long to load, so the first gig is never highlighted. We could wait for it to begin the animation, but is it worth it?
+            var whenLayerView = _this._sceneView.whenLayerView(_this._flightLayer).then(function (lyrView) {
+                console.log(lyrView);
+            });
             _this._flightLayer.queryFeatures(query).then(function (results) {
                 console.log("TimeFlies Result", results.features);
                 _this._features = results.features;
@@ -91,12 +98,17 @@ define(["require", "exports", "esri/widgets/Widget", "esri/layers/FeatureLayer",
         };
         TimeFlies.prototype.zoomAndCenterOnFeature = function (feature) {
             console.log("centering on feature", feature, feature.attributes.ort, feature.attributes.infos);
-            this._highlightSymbol = this._flightLayer.renderer.symbol;
-            this._highlightSymbol.color = [255, 0, 0, 1];
-            feature.symbol = this._highlightSymbol;
+            // use the objectID to highlight the feature
+            if (this._sceneView.layerViews.items.length > 0) {
+                if (this._highlightSelect) {
+                    this._highlightSelect.remove();
+                }
+                ;
+                this._highlightSelect = this._sceneView.layerViews.items[0].highlight(feature.attributes["FID"]);
+            }
             var latitute = 0;
             var longitude = 0;
-            // ToDo: Zoom to first feature (feature action "zoom" zooms in four LODs and centers on the selected feature)
+            // ToDo: refine animation. Camera should pan to next feature => adjust heading over time.
             if (feature.geometry.type === "point") {
                 latitute = feature.geometry.latitude;
                 longitude = feature.geometry.longitude;
@@ -104,11 +116,11 @@ define(["require", "exports", "esri/widgets/Widget", "esri/layers/FeatureLayer",
             this._goToTarget = {
                 zoom: this._zoomInLevel,
                 center: [longitude, latitute],
-                tilt: 75
+                tilt: this._cameraTilt
             };
             this._goToOptions = {
                 animate: true,
-                duration: 4000,
+                duration: this._animationDurationMs,
                 easing: "in-out-cubic"
             };
             return this._sceneView.goTo(this._goToTarget, this._goToOptions);
@@ -331,12 +343,28 @@ define(["require", "exports", "esri/widgets/Widget", "esri/layers/FeatureLayer",
         ], TimeFlies.prototype, "_sceneView", void 0);
         __decorate([
             decorators_1.property(),
+            __metadata("design:type", LayerView)
+        ], TimeFlies.prototype, "_lyrView", void 0);
+        __decorate([
+            decorators_1.property(),
+            __metadata("design:type", Object)
+        ], TimeFlies.prototype, "_highlightSelect", void 0);
+        __decorate([
+            decorators_1.property(),
             __metadata("design:type", Number)
         ], TimeFlies.prototype, "_zoomInLevel", void 0);
         __decorate([
             decorators_1.property(),
             __metadata("design:type", Number)
         ], TimeFlies.prototype, "_zoomOutLevel", void 0);
+        __decorate([
+            decorators_1.property(),
+            __metadata("design:type", Number)
+        ], TimeFlies.prototype, "_cameraTilt", void 0);
+        __decorate([
+            decorators_1.property(),
+            __metadata("design:type", Number)
+        ], TimeFlies.prototype, "_animationDurationMs", void 0);
         __decorate([
             decorators_1.property(),
             __metadata("design:type", Symbol)

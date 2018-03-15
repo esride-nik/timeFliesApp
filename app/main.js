@@ -45,7 +45,9 @@ define(["require", "exports", "esri/config", "esri/views/SceneView", "esri/widge
                     dateFieldName: "date",
                     sceneView: sceneView,
                     zoomInLevel: 13,
-                    zoomOutLevel: 7
+                    zoomOutLevel: 7,
+                    cameraTilt: 75,
+                    animationDurationMs: 4000
                 });
                 sceneView.ui.add(timeFlies, "bottom-left");
             });
@@ -105,6 +107,10 @@ define(["require", "exports", "esri/config", "esri/views/SceneView", "esri/widge
                     },
                     heading: 0.0,
                     tilt: 75.00
+                },
+                highlightOptions: {
+                    color: [255, 241, 58],
+                    fillOpacity: 0.4
                 },
                 environment: {
                     atmosphere: {

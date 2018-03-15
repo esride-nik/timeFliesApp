@@ -87,7 +87,9 @@ class BluTour extends _WidgetBase {
                 dateFieldName: "date",
                 sceneView: sceneView,
                 zoomInLevel: 13,
-                zoomOutLevel: 7
+                zoomOutLevel: 7,
+                cameraTilt: 75,
+                animationDurationMs: 4000
             });
             sceneView.ui.add(timeFlies, "bottom-left");
         });
@@ -103,6 +105,7 @@ class BluTour extends _WidgetBase {
         } as Extent;   // TS definitions don't support Extent autocast in ArcGIS JS 4.5 yet
 
         var sceneView = this.createSceneView(webscene);
+    
 
         sceneView.then(function(evt: any) {
     
@@ -139,12 +142,12 @@ class BluTour extends _WidgetBase {
             extent: btwExtent,
             // Allows for navigating the camera below the surface
             constraints: {
-            collision: {
-                enabled: false
-            },
-            tilt: {
-                max: 179.99
-            }
+                collision: {
+                    enabled: false
+                },
+                tilt: {
+                    max: 179.99
+                }
             },
             camera: {
                 position: {
@@ -155,6 +158,10 @@ class BluTour extends _WidgetBase {
                 },
                 heading: 0.0,
                 tilt: 75.00
+            },
+            highlightOptions: {
+              color: [255, 241, 58],
+              fillOpacity: 0.4
             },
             environment: {
                 atmosphere: {
