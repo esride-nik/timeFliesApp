@@ -161,9 +161,6 @@ class TimeFlies extends declared(Widget) {
           this._features = results.features;
           this.initTimeline();
           this.iterateThroughFeaturesSynchronously(0);
-
-          // ToDo: Play videos automatically
-          // ToDo: create route to all features, put into FL with ID corresponding to point and highlight route feature on each animation
         });
     }
 
@@ -226,6 +223,8 @@ class TimeFlies extends declared(Widget) {
         var latitute: number = 0;
         var longitude: number = 0;
 
+        // ToDo: Play videos automatically
+        // ToDo: create route to all features, put into FL with ID corresponding to point and highlight route feature on each animation. Alternatively, draw direct line to next point on globe.
         // ToDo: refine animation. Camera should pan to next feature => adjust heading over time.
         if (feature.geometry.type==="point") {
             latitute = (feature.geometry as Point).latitude;
@@ -354,6 +353,7 @@ class TimeFlies extends declared(Widget) {
         return jsxElement;
     }
 
+    // ToDo: Place YouTube Videos as 3D billboards on the map. Billboards should have button to unfold a details tab for attribute data. Only timeline should remain in widget.
     render() {
         const classes = {
             [CSS.base]: true,
