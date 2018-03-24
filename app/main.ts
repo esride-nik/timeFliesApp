@@ -1,3 +1,6 @@
+/// <amd-dependency path="esri/core/tsSupport/generatorHelper" name="__generator" />
+/// <amd-dependency path="esri/core/tsSupport/awaiterHelper" name="__awaiter" />
+
 import esriConfig = require("esri/config");
 import EsriMap = require("esri/Map");
 import SceneView = require("esri/views/SceneView");
@@ -19,7 +22,7 @@ import Query = require("esri/tasks/support/Query");
 import Home = require("esri/widgets/Home");
 import Basemap = require("esri/Basemap");
 import PortalItem = require("esri/portal/PortalItem");
-import Extent = require("esri/geometry/Extent");
+import { Polyline, Point, SpatialReference, Extent } from "esri/geometry";
 import PopupTemplate = require("esri/PopupTemplate");
 import WebScene = require("esri/WebScene");
 import watchUtils = require("esri/core/watchUtils");
@@ -37,6 +40,12 @@ import _WidgetsInTemplateMixin = require("dijit/_WidgetsInTemplateMixin");
 import lang = require("dojo/_base/lang");
 import array = require("dojo/_base/array");
 import on = require("dojo/on");
+
+// business logic
+import { DOMElement3D } from "./DOMElement3D";
+//import { View } from "./View";
+
+// widgets
 import CameraStatus = require("./cameraStatus");
 import TimeFlies = require("./TimeFlies");
 
@@ -108,11 +117,12 @@ class BluTour extends _WidgetBase {
     
 
         sceneView.then(function(evt: any) {
-    
-/*             var cameraStatus = new CameraStatus({
+            var cameraStatus = new CameraStatus({
                 sceneView: sceneView
             });
-            sceneView.ui.add(cameraStatus, "top-right"); */
+            sceneView.ui.add(cameraStatus, "top-right");
+
+            this.create3DDOMElements(sceneView);
 
             // Set up a home button for resetting the viewpoint to the intial extent
             var homeBtn = new Home({
@@ -121,6 +131,49 @@ class BluTour extends _WidgetBase {
             });
         });
     }
+    
+    create3DDOMElements(view: SceneView) {
+        this.create3DDOMTitle(view);
+        this.create3DDOMDescription(view);
+    }
+
+    create3DDOMDescription(view: SceneView) { //View) {
+        var element = document.getElementById("description")
+        if (element===null) {
+            element = new HTMLDivElement();
+            element.id = "description";
+        }
+        const titleElement: HTMLElement = element;
+        const domElement = new DOMElement3D({ view: view, element: titleElement, heading: 90 });
+      
+/*         watchUtils.init(view.viewport, "clippingArea", () => {
+          const clip = view.viewport.clippingArea;
+          const spatialReference = clip.spatialReference;
+      
+          // Position the element in between the ymin segment of the clipping area
+          const location = new Point({ x: clip.xmax, y: (clip.ymin + clip.ymax) / 2, z: 6500, spatialReference });
+          domElement.location = location;
+        }); */
+      }
+      
+      create3DDOMTitle(view: SceneView) { //View) {
+        var element = document.getElementById("description")
+        if (element===null) {
+            element = new HTMLDivElement();
+            element.id = "description";
+        }
+        const titleElement: HTMLElement = element;
+        const domElement = new DOMElement3D({ view: view, element: titleElement, heading: -180 });
+      
+/*         watchUtils.init(view.viewport, "clippingArea", () => {
+          const clip = view.viewport.clippingArea;
+          const spatialReference = clip.spatialReference;
+      
+          // Position the element in between the ymin segment of the clipping area
+          const location = new Point({ x: (clip.xmin + clip.xmax) / 2, y: clip.ymin, z: 8000, spatialReference });
+          domElement.location = location;
+        }); */
+      }
 
     defineInfoTemplate(): PopupTemplate {
         var infoTemplate = new PopupTemplate({

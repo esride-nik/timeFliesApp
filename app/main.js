@@ -1,3 +1,5 @@
+/// <amd-dependency path="esri/core/tsSupport/generatorHelper" name="__generator" />
+/// <amd-dependency path="esri/core/tsSupport/awaiterHelper" name="__awaiter" />
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -8,7 +10,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-define(["require", "exports", "esri/config", "esri/views/SceneView", "esri/widgets/Home", "esri/PopupTemplate", "esri/WebScene", "esri/core/watchUtils", "dijit/_WidgetBase", "dojo/_base/lang", "./TimeFlies"], function (require, exports, esriConfig, SceneView, Home, PopupTemplate, WebScene, watchUtils, _WidgetBase, lang, TimeFlies) {
+define(["require", "exports", "esri/core/tsSupport/generatorHelper", "esri/core/tsSupport/awaiterHelper", "esri/config", "esri/views/SceneView", "esri/widgets/Home", "esri/PopupTemplate", "esri/WebScene", "esri/core/watchUtils", "dijit/_WidgetBase", "dojo/_base/lang", "./DOMElement3D", "./cameraStatus", "./TimeFlies"], function (require, exports, __generator, __awaiter, esriConfig, SceneView, Home, PopupTemplate, WebScene, watchUtils, _WidgetBase, lang, DOMElement3D_1, CameraStatus, TimeFlies) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var BluTour = /** @class */ (function (_super) {
@@ -62,16 +64,55 @@ define(["require", "exports", "esri/config", "esri/views/SceneView", "esri/widge
             }; // TS definitions don't support Extent autocast in ArcGIS JS 4.5 yet
             var sceneView = this.createSceneView(webscene);
             sceneView.then(function (evt) {
-                /*             var cameraStatus = new CameraStatus({
-                                sceneView: sceneView
-                            });
-                            sceneView.ui.add(cameraStatus, "top-right"); */
+                var cameraStatus = new CameraStatus({
+                    sceneView: sceneView
+                });
+                sceneView.ui.add(cameraStatus, "top-right");
+                this.create3DDOMElements(sceneView);
                 // Set up a home button for resetting the viewpoint to the intial extent
                 var homeBtn = new Home({
                     view: sceneView,
                     container: "homeDiv"
                 });
             });
+        };
+        BluTour.prototype.create3DDOMElements = function (view) {
+            this.create3DDOMTitle(view);
+            this.create3DDOMDescription(view);
+        };
+        BluTour.prototype.create3DDOMDescription = function (view) {
+            var element = document.getElementById("description");
+            if (element === null) {
+                element = new HTMLDivElement();
+                element.id = "description";
+            }
+            var titleElement = element;
+            var domElement = new DOMElement3D_1.DOMElement3D({ view: view, element: titleElement, heading: 90 });
+            /*         watchUtils.init(view.viewport, "clippingArea", () => {
+                      const clip = view.viewport.clippingArea;
+                      const spatialReference = clip.spatialReference;
+                  
+                      // Position the element in between the ymin segment of the clipping area
+                      const location = new Point({ x: clip.xmax, y: (clip.ymin + clip.ymax) / 2, z: 6500, spatialReference });
+                      domElement.location = location;
+                    }); */
+        };
+        BluTour.prototype.create3DDOMTitle = function (view) {
+            var element = document.getElementById("description");
+            if (element === null) {
+                element = new HTMLDivElement();
+                element.id = "description";
+            }
+            var titleElement = element;
+            var domElement = new DOMElement3D_1.DOMElement3D({ view: view, element: titleElement, heading: -180 });
+            /*         watchUtils.init(view.viewport, "clippingArea", () => {
+                      const clip = view.viewport.clippingArea;
+                      const spatialReference = clip.spatialReference;
+                  
+                      // Position the element in between the ymin segment of the clipping area
+                      const location = new Point({ x: (clip.xmin + clip.xmax) / 2, y: clip.ymin, z: 8000, spatialReference });
+                      domElement.location = location;
+                    }); */
         };
         BluTour.prototype.defineInfoTemplate = function () {
             var infoTemplate = new PopupTemplate({

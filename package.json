@@ -1,0 +1,20 @@
+{
+  "name": "timeFlies",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "lint": "tslint --project ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/gl-matrix": "^2.4.0",
+    "gl-matrix": "^2.4.0",
+    "tslint": "^5.9.1",
+    "typescript": "^2.7.2"
+  }
+}

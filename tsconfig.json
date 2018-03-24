@@ -8,15 +8,20 @@
     "noImplicitAny": true,
     "strictNullChecks": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "types": ["arcgis-js-api"],
     "jsx": "react",
     "jsxFactory": "tsx",
     "preserveConstEnums": true,
-    "suppressImplicitAnyIndexErrors": true
+    "suppressImplicitAnyIndexErrors": true,
+    "lib": [
+      "dom",
+      "es2015.promise",
+      "scripthost",
+      "es5"
+    ]
   },
   "include": [
-    "./app/*"
+    "app/*",
+    "typings/**/*"
   ],
   "exclude" : ["node_modules"]
 }
