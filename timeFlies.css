@@ -60,7 +60,7 @@ body,
 .popupvid {
     float:right;
 }
-@media all and (min-width: 800px) {
+@media all and (min-width: 1200px) {
     .popupvid {
         width:400px;
         height:300px;
@@ -69,7 +69,7 @@ body,
         min-width:600px;
     }
 }
-@media all and (max-width: 800px) {
+@media all and (max-width: 1000px) {
     .popupvid {
         width:300px;
         height:225px;
@@ -78,7 +78,7 @@ body,
         min-width:500px;
     }
 }
-@media all and (max-width: 500px) {
+@media all and (max-width: 800px) {
     .popupvid {
         width:200px;
         height:150px;
@@ -118,3 +118,44 @@ body,
 #visualization {
     background:#fff;
 }
+
+
+/* START 3D Billboards */
+
+.delayed-visible {
+    opacity: 0;
+    transition: opacity 1000ms ease;
+    -webkit-transition: opacity 1000ms ease;
+    transition-delay: 2s;
+    -webkit-transition-delay: 2s;
+  }
+  
+  .make-visible {
+    opacity: 1;
+  }
+  
+  #title {
+    font-size: 3em;
+    text-shadow: -1px -1px 0 #fff,
+      1px -1px 0 #fff,
+      -1px 1px 0 #fff,
+       1px 1px 0 #fff;
+  }
+  
+  #description {
+    max-width: 300px;
+    font-size: 0.9em;
+    text-shadow: -1px -1px 0 #fff,
+      1px -1px 0 #fff,
+      -1px 1px 0 #fff,
+       1px 1px 0 #fff;
+  }
+  
+  .dom25d {
+    position: absolute;
+    top: 0; left: 0;
+    pointer-events: none;
+    transform-origin: bottom;
+  }
+
+  /* END 3D Billboards */

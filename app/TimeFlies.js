@@ -14,10 +14,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-define(["require", "exports", "esri/widgets/Widget", "esri/layers/FeatureLayer", "esri/tasks/support/Query", "esri/views/SceneView", "esri/views/layers/LayerView", "esri/symbols/Symbol", "dojo/dom", "dojo/dom-class", "dojo/dom-construct", "https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js", "esri/core/accessorSupport/decorators", "esri/widgets/support/widget"], function (require, exports, Widget, FeatureLayer, Query, SceneView, LayerView, Symbol, dom, domClass, domConstruct, vis, decorators_1, widget_1) {
+define(["require", "exports", "esri/widgets/Widget", "esri/tasks/support/Query", "dojo/dom", "dojo/dom-class", "dojo/dom-construct", "https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js", "esri/core/accessorSupport/decorators", "esri/widgets/support/widget"], function (require, exports, Widget, Query, dom, domClass, domConstruct, vis, decorators_1, widget_1) {
     "use strict";
     var CSS = {
         base: "esri-widget",
@@ -303,134 +300,104 @@ define(["require", "exports", "esri/widgets/Widget", "esri/layers/FeatureLayer",
             var _a;
         };
         __decorate([
-            decorators_1.property(),
-            __metadata("design:type", typeof (_a = (typeof vis !== "undefined" && vis).Timeline) === "function" && _a || Object)
+            decorators_1.property()
         ], TimeFlies.prototype, "_timeline", void 0);
         __decorate([
-            decorators_1.property(),
-            __metadata("design:type", Boolean)
+            decorators_1.property()
         ], TimeFlies.prototype, "_animationPlaying", void 0);
         __decorate([
-            decorators_1.property(),
-            __metadata("design:type", Boolean)
+            decorators_1.property()
         ], TimeFlies.prototype, "_animateOnce", void 0);
         __decorate([
-            decorators_1.property(),
-            __metadata("design:type", Number)
+            decorators_1.property()
         ], TimeFlies.prototype, "_currentFeature", void 0);
         __decorate([
-            decorators_1.property(),
-            __metadata("design:type", Array)
+            decorators_1.property()
         ], TimeFlies.prototype, "_features", void 0);
         __decorate([
-            decorators_1.property(),
-            __metadata("design:type", Object)
+            decorators_1.property()
         ], TimeFlies.prototype, "_goToTarget", void 0);
         __decorate([
-            decorators_1.property(),
-            __metadata("design:type", Object)
+            decorators_1.property()
         ], TimeFlies.prototype, "_goToOptions", void 0);
         __decorate([
-            decorators_1.property(),
-            __metadata("design:type", FeatureLayer)
+            decorators_1.property()
         ], TimeFlies.prototype, "_flightLayer", void 0);
         __decorate([
-            decorators_1.property(),
-            __metadata("design:type", String)
+            decorators_1.property()
         ], TimeFlies.prototype, "_dateFieldName", void 0);
         __decorate([
-            decorators_1.property(),
-            __metadata("design:type", SceneView)
+            decorators_1.property()
         ], TimeFlies.prototype, "_sceneView", void 0);
         __decorate([
-            decorators_1.property(),
-            __metadata("design:type", LayerView)
+            decorators_1.property()
         ], TimeFlies.prototype, "_lyrView", void 0);
         __decorate([
-            decorators_1.property(),
-            __metadata("design:type", Object)
+            decorators_1.property()
         ], TimeFlies.prototype, "_highlightSelect", void 0);
         __decorate([
-            decorators_1.property(),
-            __metadata("design:type", Number)
+            decorators_1.property()
         ], TimeFlies.prototype, "_zoomInLevel", void 0);
         __decorate([
-            decorators_1.property(),
-            __metadata("design:type", Number)
+            decorators_1.property()
         ], TimeFlies.prototype, "_zoomOutLevel", void 0);
         __decorate([
-            decorators_1.property(),
-            __metadata("design:type", Number)
+            decorators_1.property()
         ], TimeFlies.prototype, "_cameraTilt", void 0);
         __decorate([
-            decorators_1.property(),
-            __metadata("design:type", Number)
+            decorators_1.property()
         ], TimeFlies.prototype, "_animationDurationMs", void 0);
         __decorate([
-            decorators_1.property(),
-            __metadata("design:type", Symbol)
+            decorators_1.property()
         ], TimeFlies.prototype, "_highlightSymbol", void 0);
         __decorate([
             decorators_1.property(),
-            widget_1.renderable(),
-            __metadata("design:type", Number)
+            widget_1.renderable()
         ], TimeFlies.prototype, "fid", void 0);
         __decorate([
             decorators_1.property(),
-            widget_1.renderable(),
-            __metadata("design:type", String)
+            widget_1.renderable()
         ], TimeFlies.prototype, "date", void 0);
         __decorate([
             decorators_1.property(),
-            widget_1.renderable(),
-            __metadata("design:type", HTMLElement)
+            widget_1.renderable()
         ], TimeFlies.prototype, "infos", void 0);
         __decorate([
             decorators_1.property(),
-            widget_1.renderable(),
-            __metadata("design:type", HTMLElement)
+            widget_1.renderable()
         ], TimeFlies.prototype, "veranstaltung", void 0);
         __decorate([
             decorators_1.property(),
-            widget_1.renderable(),
-            __metadata("design:type", Number)
+            widget_1.renderable()
         ], TimeFlies.prototype, "nr", void 0);
         __decorate([
             decorators_1.property(),
-            widget_1.renderable(),
-            __metadata("design:type", String)
+            widget_1.renderable()
         ], TimeFlies.prototype, "ort", void 0);
         __decorate([
             decorators_1.property(),
-            widget_1.renderable(),
-            __metadata("design:type", String)
+            widget_1.renderable()
         ], TimeFlies.prototype, "plz", void 0);
         __decorate([
             decorators_1.property(),
-            widget_1.renderable(),
-            __metadata("design:type", String)
+            widget_1.renderable()
         ], TimeFlies.prototype, "stagetime", void 0);
         __decorate([
             decorators_1.property(),
-            widget_1.renderable(),
-            __metadata("design:type", String)
+            widget_1.renderable()
         ], TimeFlies.prototype, "tagebuch", void 0);
         __decorate([
             decorators_1.property(),
-            widget_1.renderable(),
-            __metadata("design:type", String)
+            widget_1.renderable()
         ], TimeFlies.prototype, "video", void 0);
         __decorate([
             decorators_1.property(),
-            widget_1.renderable(),
-            __metadata("design:type", String)
+            widget_1.renderable()
         ], TimeFlies.prototype, "wochentag", void 0);
         TimeFlies = __decorate([
-            decorators_1.subclass("esride.widgets.TimeFlies"),
-            __metadata("design:paramtypes", [Object])
+            decorators_1.subclass("esride.widgets.TimeFlies")
         ], TimeFlies);
         return TimeFlies;
-        var _a;
     }(decorators_1.declared(Widget)));
     return TimeFlies;
 });

@@ -98,7 +98,7 @@ class BluTour extends _WidgetBase {
                 zoomInLevel: 13,
                 zoomOutLevel: 7,
                 cameraTilt: 75,
-                animationDurationMs: 4000
+                animationDurationMs: 10000
             });
             sceneView.ui.add(timeFlies, "bottom-left");
         });
@@ -115,15 +115,16 @@ class BluTour extends _WidgetBase {
 
         var sceneView = this.createSceneView(webscene);
     
-
-        sceneView.then(function(evt: any) {
+        // breaking change in 4.7: JSAPI promises now using .when() instead of .then()
+        sceneView.when((evt: any) => {
             var cameraStatus = new CameraStatus({
                 sceneView: sceneView
             });
             sceneView.ui.add(cameraStatus, "top-right");
 
-            this.create3DDOMElements(sceneView);
-
+            this.create3DDOMDescription(sceneView);
+            this.create3DDOMTitle(sceneView);
+ 
             // Set up a home button for resetting the viewpoint to the intial extent
             var homeBtn = new Home({
                 view: sceneView,
@@ -131,14 +132,9 @@ class BluTour extends _WidgetBase {
             });
         });
     }
-    
-    create3DDOMElements(view: SceneView) {
-        this.create3DDOMTitle(view);
-        this.create3DDOMDescription(view);
-    }
 
     create3DDOMDescription(view: SceneView) { //View) {
-        var element = document.getElementById("description")
+        var element = document.getElementById("description");
         if (element===null) {
             element = new HTMLDivElement();
             element.id = "description";
@@ -146,33 +142,36 @@ class BluTour extends _WidgetBase {
         const titleElement: HTMLElement = element;
         const domElement = new DOMElement3D({ view: view, element: titleElement, heading: 90 });
       
-/*         watchUtils.init(view.viewport, "clippingArea", () => {
-          const clip = view.viewport.clippingArea;
-          const spatialReference = clip.spatialReference;
+        watchUtils.init(view.camera, "position", () => {
+          console.log("create3DDOMDescription camera.position", view.camera);
+          const position = view.camera.position;
+          const spatialReference = position.spatialReference;
       
           // Position the element in between the ymin segment of the clipping area
-          const location = new Point({ x: clip.xmax, y: (clip.ymin + clip.ymax) / 2, z: 6500, spatialReference });
+          const location = new Point({ x: position.x, y: position.y, z: 6500, spatialReference });
           domElement.location = location;
-        }); */
+        });
       }
       
       create3DDOMTitle(view: SceneView) { //View) {
-        var element = document.getElementById("description")
+        var element = document.getElementById("description");
         if (element===null) {
             element = new HTMLDivElement();
-            element.id = "description";
+            element.id = "title";
         }
         const titleElement: HTMLElement = element;
         const domElement = new DOMElement3D({ view: view, element: titleElement, heading: -180 });
-      
-/*         watchUtils.init(view.viewport, "clippingArea", () => {
-          const clip = view.viewport.clippingArea;
-          const spatialReference = clip.spatialReference;
-      
-          // Position the element in between the ymin segment of the clipping area
-          const location = new Point({ x: (clip.xmin + clip.xmax) / 2, y: clip.ymin, z: 8000, spatialReference });
-          domElement.location = location;
-        }); */
+
+        //view.watch("camera", () => {
+        watchUtils.init(view.camera, "position", () => {
+            console.log("create3DDOMTitle camera.position", view.camera);
+            const position = view.camera.position;
+            const spatialReference = position.spatialReference;
+        
+            // Position the element in between the ymin segment of the clipping area
+            const location = new Point({ x: position.x, y: position.y, z: 6500, spatialReference });
+            domElement.location = location;
+        });
       }
 
     defineInfoTemplate(): PopupTemplate {

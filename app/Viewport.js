@@ -16,9 +16,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
 define(["require", "exports", "esri/core/tsSupport/declareExtendsHelper", "esri/core/tsSupport/decorateHelper", "esri/geometry", "esri/core/Accessor", "esri/core/accessorSupport/decorators"], function (require, exports, __extends, __decorate, geometry_1, Accessor, decorators_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -84,17 +81,13 @@ define(["require", "exports", "esri/core/tsSupport/declareExtendsHelper", "esri/
             this.center = new geometry_1.Point({ x: x + dx, y: y + dy, spatialReference: spatialReference });
         };
         __decorate([
-            decorators_1.property(),
-            __metadata("design:type", Object)
+            decorators_1.property()
         ], Viewport.prototype, "size", void 0);
         __decorate([
-            decorators_1.property(),
-            __metadata("design:type", geometry_1.Point)
+            decorators_1.property()
         ], Viewport.prototype, "center", void 0);
         __decorate([
-            decorators_1.property({ dependsOn: ["size", "center"], readOnly: true }),
-            __metadata("design:type", geometry_1.Extent),
-            __metadata("design:paramtypes", [])
+            decorators_1.property({ dependsOn: ["size", "center"], readOnly: true })
         ], Viewport.prototype, "clippingArea", null);
         Viewport = __decorate([
             decorators_1.subclass()

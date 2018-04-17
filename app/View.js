@@ -16,9 +16,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -54,7 +51,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-define(["require", "exports", "esri/core/tsSupport/declareExtendsHelper", "esri/core/tsSupport/decorateHelper", "esri/Map", "esri/geometry", "esri/core/watchUtils", "esri/core/Accessor", "esri/core/accessorSupport/decorators", "esri/layers/TileLayer", "esri/layers/FeatureLayer", "esri/layers/ElevationLayer", "esri/renderers/SimpleRenderer", "esri/symbols/FillSymbol3DLayer", "esri/symbols/MeshSymbol3D", "esri/symbols/edges/SolidEdges3D", "esri/symbols/edges/SketchyEdges3D", "esri/views/SceneView", "./BlendLayer", "./Viewport", "./LavaRenderer", "./TectonicPlatesLayer", "./PlateBoundaryLayer", "./ExaggerationElevationLayer"], function (require, exports, __extends, __decorate, Map, geometry_1, watchUtils, Accessor, decorators_1, TileLayer, FeatureLayer, ElevationLayer, SimpleRenderer, FillSymbol3DLayer, MeshSymbol3D, SolidEdges3D, SketchyEdges3D, SceneView, BlendLayer_1, Viewport_1, LavaRenderer_1, TectonicPlatesLayer_1, PlateBoundaryLayer_1, ExaggerationElevationLayer_1) {
+define(["require", "exports", "esri/core/tsSupport/declareExtendsHelper", "esri/core/tsSupport/decorateHelper", "esri/Map", "esri/core/watchUtils", "esri/core/Accessor", "esri/core/accessorSupport/decorators", "esri/layers/TileLayer", "esri/layers/FeatureLayer", "esri/layers/ElevationLayer", "esri/renderers/SimpleRenderer", "esri/symbols/FillSymbol3DLayer", "esri/symbols/MeshSymbol3D", "esri/symbols/edges/SolidEdges3D", "esri/symbols/edges/SketchyEdges3D", "esri/views/SceneView", "./BlendLayer", "./Viewport", "./LavaRenderer", "./TectonicPlatesLayer", "./PlateBoundaryLayer", "./ExaggerationElevationLayer"], function (require, exports, __extends, __decorate, Map, watchUtils, Accessor, decorators_1, TileLayer, FeatureLayer, ElevationLayer, SimpleRenderer, FillSymbol3DLayer, MeshSymbol3D, SolidEdges3D, SketchyEdges3D, SceneView, BlendLayer_1, Viewport_1, LavaRenderer_1, TectonicPlatesLayer_1, PlateBoundaryLayer_1, ExaggerationElevationLayer_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var View = /** @class */ (function (_super) {
@@ -288,20 +285,16 @@ define(["require", "exports", "esri/core/tsSupport/declareExtendsHelper", "esri/
             });
         };
         __decorate([
-            decorators_1.property({ readOnly: true }),
-            __metadata("design:type", SceneView)
+            decorators_1.property({ readOnly: true })
         ], View.prototype, "view", void 0);
         __decorate([
-            decorators_1.property({ readOnly: true }),
-            __metadata("design:type", Viewport_1.Viewport)
+            decorators_1.property({ readOnly: true })
         ], View.prototype, "viewport", void 0);
         __decorate([
-            decorators_1.property({ constructOnly: true }),
-            __metadata("design:type", geometry_1.Polyline)
+            decorators_1.property({ constructOnly: true })
         ], View.prototype, "tectonicPlateBoundaryLine", void 0);
         __decorate([
-            decorators_1.property({ readOnly: true }),
-            __metadata("design:type", TileLayer)
+            decorators_1.property({ readOnly: true })
         ], View.prototype, "hillShadeLayer", void 0);
         View = __decorate([
             decorators_1.subclass()
