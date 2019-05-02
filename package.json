@@ -1,0 +1,31 @@
+{
+  "name": "timeflies",
+  "version": "1.0.0",
+  "description": "A widget that makes the time fly.",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "browser-sync -s -f ./"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/esride-nik/timeFliesApp.git"
+  },
+  "keywords": [
+    "JSAP",
+    "4.x",
+    "widget",
+    "3D"
+  ],
+  "author": "Niklas Köhn",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/esride-nik/timeFliesApp/issues"
+  },
+  "homepage": "https://github.com/esride-nik/timeFliesApp#readme",
+  "devDependencies": {
+    "@types/arcgis-js-api": "^3.28.0",
+    "browser-sync": "^2.26.5",
+    "typescript": "^3.4.5"
+  }
+}

@@ -1,7 +1,10 @@
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -222,6 +225,7 @@ define(["require", "exports", "esri/widgets/Widget", "esri/layers/FeatureLayer",
         };
         // ToDo: Place YouTube Videos as 3D billboards on the map. Billboards should have button to unfold a details tab for attribute data. Only timeline should remain in widget.
         TimeFlies.prototype.render = function () {
+            var _a;
             var classes = (_a = {},
                 _a[CSS.base] = true,
                 _a[CSS.esrideTimeFlies] = true,
@@ -300,11 +304,11 @@ define(["require", "exports", "esri/widgets/Widget", "esri/layers/FeatureLayer",
                                 widget_1.tsx("path", { d: "M28 16.002L14 26V6l14 10.002zM6 26h4V6H6v20z" }))))),
                 widget_1.tsx("link", { href: "https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css", rel: "stylesheet", type: "text/css" }),
                 widget_1.tsx("div", { id: "visualization" })));
-            var _a;
         };
+        var _a, _b, _c;
         __decorate([
             decorators_1.property(),
-            __metadata("design:type", typeof (_a = (typeof vis !== "undefined" && vis).Timeline) === "function" && _a || Object)
+            __metadata("design:type", typeof (_a = typeof vis !== "undefined" && vis.Timeline) === "function" ? _a : Object)
         ], TimeFlies.prototype, "_timeline", void 0);
         __decorate([
             decorators_1.property(),
@@ -340,11 +344,11 @@ define(["require", "exports", "esri/widgets/Widget", "esri/layers/FeatureLayer",
         ], TimeFlies.prototype, "_dateFieldName", void 0);
         __decorate([
             decorators_1.property(),
-            __metadata("design:type", SceneView)
+            __metadata("design:type", typeof (_b = typeof SceneView !== "undefined" && SceneView) === "function" ? _b : Object)
         ], TimeFlies.prototype, "_sceneView", void 0);
         __decorate([
             decorators_1.property(),
-            __metadata("design:type", LayerView)
+            __metadata("design:type", typeof (_c = typeof LayerView !== "undefined" && LayerView) === "function" ? _c : Object)
         ], TimeFlies.prototype, "_lyrView", void 0);
         __decorate([
             decorators_1.property(),
@@ -430,7 +434,6 @@ define(["require", "exports", "esri/widgets/Widget", "esri/layers/FeatureLayer",
             __metadata("design:paramtypes", [Object])
         ], TimeFlies);
         return TimeFlies;
-        var _a;
     }(decorators_1.declared(Widget)));
     return TimeFlies;
 });
